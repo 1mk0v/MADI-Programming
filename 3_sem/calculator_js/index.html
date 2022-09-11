@@ -1,0 +1,60 @@
+<!DOCTYPE html> 
+<html>
+<head>
+    <title>Calc by 1mk0v</title>
+    <link rel="stylesheet" type="text/css" href="css/index.css">
+    <link rel="stylesheet" type="text/css" href="css/calc.css">
+    <script src="calc.js"></script>
+</head>
+<body>
+    <div class="frame">
+
+        <div>
+            <textarea class="output_field" type="text" readonly id="output_field" readonly></textarea>
+        </div>
+
+        <div>
+            <input class="entry_field" type="text" name="entry_field" id="input_field">
+        </div>
+
+        <div>
+            <table class="keyboard">
+                <tr>
+                    <td><button style="background-color: #ff0000;" id="delete" onclick="delete_all()" >C</button></td>
+                    <td><button>(</button></td>
+                    <td><button>)</button></td>
+                    <td><button>mod</button></td>
+                    <td><button>П</button></td>
+                </tr>
+                <tr>
+                    <td><button id="7" onclick="input_numbers(this.id)">7</button></td>
+                    <td><button id="8" onclick="input_numbers(this.id)">8</button></td>
+                    <td><button id="9" onclick="input_numbers(this.id)">9</button></td>
+                    <td><button>÷</button></td>
+                    <td><button>√</button></td>
+                </tr>
+                <tr>
+                    <td><button id="4" onclick="input_numbers(this.id)">4</button></td>
+                    <td><button id="5" onclick="input_numbers(this.id)">5</button></td>
+                    <td><button id="6" onclick="input_numbers(this.id)">6</button></td>
+                    <td><button>×</button></td>
+                    <td><button><i>x²</i></button></td>
+                </tr>
+                <tr>
+                    <td><button id="1" onclick="input_numbers(this.id)">1</button></td>
+                    <td><button id="2" onclick="input_numbers(this.id)">2</button></td>
+                    <td><button id="3" onclick="input_numbers(this.id)">3</button></td>
+                    <td><button>-</button></td>
+                    <td rowspan="2"><button  style="background-color: #00FF00;" id="output"  onclick="equals()">=</button></td>
+                </tr>
+                <tr>
+                    <td><button id="0" onclick="input_numbers(this.id)">0</button></td>
+                    <td><button>.</button></td>
+                    <td><button>%</button></td>
+                    <td><button>+</button></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
