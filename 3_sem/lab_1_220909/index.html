@@ -2,16 +2,57 @@
 <html>
 <head>
     <title>Лабораторная работа №1</title>
+    <link rel="stylesheet" type="text/css" href="css/index.css">
+    <link rel="stylesheet" type="text/css" href="css/calc.css">
     <script src="calc.js"></script>
 </head>
 <body>
-    <div style="margin-top: 100px; margin-left: 100px">
-        <input type="text" name="first" id="first" placeholder="Введите первое число">
-        <br>
-        <input type="text" name="second" id="second" placeholder="Введите второе число">
-        <button onclick="plus()">Сложить</button>
-        <br>
-        <textarea rows="10" cols="20" readonly id="sum"></textarea>
+    <div class="frame">
+        <div>
+            <input class="entry_field" type="text" name="entry_field" id="entry_field">
+        </div>
+        <div>
+            <table class="keyboard">
+                <tr>
+                    <td><button>'</button></td>
+                    <td><button>'</button></td>
+                    <td><button>'</button></td>
+                    <td><button>'</button></td>
+                </tr>
+                <tr>
+                    <td><button>7</button></td>
+                    <td><button>8</button></td>
+                    <td><button>9</button></td>
+                    <td><button>÷</button></td>
+                </tr>
+                <tr>
+                    <td><button>4</button></td>
+                    <td><button>5</button></td>
+                    <td><button>6</button></td>
+                    <td><button>x</button></td>
+                </tr>
+                <tr>
+                    <td><button>1</button></td>
+                    <td><button>2</button></td>
+                    <td><button>3</button></td>
+                    <td><button>+</button></td>
+                </tr>
+                <tr>
+                    <td><button>.</button></td>
+                    <td><button>0</button></td>
+                    <td><button>DEL</button></td>
+                    <td><button>-</button></td>
+                </tr>
+            </table>
+        </div>
     </div>
+        <!-- <div style="margin-top: 100px; margin-left: 100px">
+            <input type="text" name="first" id="first" placeholder="Введите первое число">
+            <br>
+            <input type="text" name="second" id="second" placeholder="Введите второе число">
+            <button onclick="plus()">Сложить</button>
+            <br>
+            <textarea rows="10" cols="20" readonly id="sum"></textarea>
+        </div> -->
 </body>
 </html>
