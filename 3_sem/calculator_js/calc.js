@@ -44,25 +44,31 @@
 // }
 
 
-
-
-
+// Функция действий, где action - это знак действия
 function operation(action) {
+    // Берем значения из строки ввода и вывода
     let output = document.getElementById('output_field').value;
     let input = document.getElementById('input_field').value;
+    // Проверяем на пустоту строку ввода
     if (input == '') {
+        // Если строка ввода пуста мы просто добавляем знак действия к строке вывода
         document.getElementById('output_field').value = output + action;
     } else {
+        // Иначе мы проверяем строку ввода на Not a Number
         if (isNaN(input)) {
             input = '';
             alert("Я не знаю как выполнять математические операции со строками...(")
         }
     }
+    // Проверяем строку вывода на пустоту
     if (output == '') {
+        // Если истинно, тогда присваиваем переменной output значения ввода и строке вывода, то что мы ввели + знак действия
         output = input;
         document.getElementById('output_field').value = output + action;
+        // Естественно строку ввода обнуляем, чтобы пользователь смог ввести новое число
         document.getElementById('input_field').value = ''
-    } else { 
+    } else {
+        // Если ложно, тогда считаем выполняем код (output+input)
         let calculation =  eval(output+input);
         if (calculation == 1/0) {
             alert("Бесконечность не предел")
@@ -73,6 +79,7 @@ function operation(action) {
         
     }
 }
+
 
 // Знак равно
 function equals() {
@@ -127,10 +134,13 @@ function input_numbers(id) {
 function delete_all() {
     // Берет значение из строки ввода
     let input_field = document.getElementById('input_field').value;
-    // 
+    // Если в строке ввода 0, тогда он удаляет все содержимое в строке выводе
     if (input_field == 0) {
         document.getElementById('output_field').value = '';
+    } else {
+        // Иначе он в строку ввода пишет 0
+        document.getElementById('input_field').value = 0;
     }
-    document.getElementById('input_field').value = 0; 
+     
 }
 
