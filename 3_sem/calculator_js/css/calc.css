@@ -1,9 +1,8 @@
 .frame{ 
     width: 420px; 
-    height: 595px;
+    height: 615px;
     margin: 200px auto;
     background: #262626; 
-    border-radius: 10px;
     font-family: "Pixels";
    }
 
@@ -34,7 +33,7 @@
     text-align: left;
     resize: none;
     outline: none;
-    cursor:default;
+    cursor: default;
     color: rgb(13, 0, 255);
     font-family: "Pixels";
 }
@@ -42,17 +41,16 @@
 
 
 .keyboard {
-    width: 400px;
-    height: 405px;
+    width: 410px;
+    height: 415px;
     text-align: center;
     margin: 0 auto;
 }
 
 button {
-    border-radius: 50%;
     border: none;
-    width: 78px;
-    height: 78px;
+    width: 100%;
+    height: 100%;
     font-size: 20px;
     font-weight: 600;
     color: #262626;
@@ -60,6 +58,10 @@ button {
     font-family: "Pixels";
 }
 
+td {
+    width: 75px;
+    height: 75px;
+}
 
 @font-face {
     font-family: "Pixels";

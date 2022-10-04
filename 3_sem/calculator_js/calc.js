@@ -125,6 +125,64 @@ function delete_all() {
 
 
 
+//----------------------------------ОПАСНАЯ-ШТУКА-ВВОД-С-КЛАВИАТУРЫ-------------------------------------------//
+
+document.addEventListener('keydown', function(event) {
+    switch (event.key) {
+        case '0':
+            input_numbers(event.key);
+            break;
+        case '1':
+            input_numbers(event.key);
+            break;
+        case '2':
+            input_numbers(event.key);
+            break;
+        case '3':
+            input_numbers(event.key);
+            break;
+        case '4':
+            input_numbers(event.key);
+            break;
+        case '5':
+            input_numbers(event.key);
+            break;
+        case '6':
+            input_numbers(event.key);
+            break;
+        case '7':
+            input_numbers(event.key);
+            break;
+        case '8':
+            input_numbers(event.key);
+            break;
+        case '9':
+            input_numbers(event.key);
+            break;
+        case '.':
+            input_numbers(event.key);
+            break;
+        case '/':
+            operation(event.key);
+            break;
+        case '*':
+            operation(event.key);
+            break;
+        case '-':
+            operation(event.key);
+            break;
+        case '+':
+            operation(event.key);
+            break;
+        case 'Enter':
+            equals();
+            break;
+        default:
+            // alert(event.key);
+            break;
+    }
+    }
+);
 
 //----------------------------------------ФУНКЦИИ-УПРОЩЕНИЯ-КОДА--------------------------------------------//
 
