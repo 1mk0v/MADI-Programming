@@ -1,49 +1,3 @@
-// Функция сложения
-// function sum() {
-//     // Берем значения с поля ввода и вывода
-//     let output = document.getElementById('output_field').value;
-//     let input = parseFloat(document.getElementById('input_field').value);
-//     // Проверяем корректность ввода
-//     if (isNaN(input)) {
-//         input = 0
-//         document.getElementById('input_field').value = input;
-//     }
-//     // Проверка на пустоту поля вывода
-//     if (output == '') {
-//         output = input; 
-//         document.getElementById('output_field').value = output;
-//         document.getElementById('input_field').value = '';
-//     }
-//      else {
-//         // alert(parseFloat(document.getElementById('output_field').value))
-//         let sum = parseFloat(document.getElementById('output_field').value) + input;
-//         document.getElementById('output_field').value = sum;
-//         document.getElementById('input_field').value = '';
-//     }
-// }
-
-// function difference() {
-//     let output = document.getElementById('output_field').value;
-//     let input = parseFloat(document.getElementById('input_field').value);
-//     // Проверяем корректность ввода
-//     if (isNaN(input)) {
-//         input = 0
-//         document.getElementById('input_field').value = input;
-//     }
-//     // Проверка на пустоту поля вывода
-//     if (output == '') {
-//         output = input; 
-//         document.getElementById('output_field').value = output + "-";
-//         document.getElementById('input_field').value = '';
-//     } else {
-//         // alert(parseFloat(document.getElementById('output_field').value))
-//         let difference = parseFloat(document.getElementById('output_field').value) - input;
-//         document.getElementById('output_field').value = difference + "-";
-//         document.getElementById('input_field').value = '';
-//     }
-// }
-
-
 // Функция действий, где action - это знак действия
 function operation(action) {
     // Берем значения из строки ввода и вывода
@@ -60,6 +14,9 @@ function operation(action) {
             alert("Я не знаю как выполнять математические операции со строками...(")
         }
     }
+
+    //switch case +-*%
+
     // Проверяем строку вывода на пустоту
     if (output == '') {
         // Если истинно, тогда присваиваем переменной output значения ввода и строке вывода, то что мы ввели + знак действия
@@ -76,7 +33,6 @@ function operation(action) {
             document.getElementById('output_field').value = calculation + action;
             document.getElementById('input_field').value = '';
         }
-        
     }
 }
 
@@ -96,6 +52,8 @@ function equals() {
         document.getElementById('input_field').value = '';   
     }
 
+
+
     // Проверяем значение которое получится при сложении значений полей ввода и вывода на Not a Number
     if (isNaN(output+input)) {
         // Если оно верно, то это значит, что наше выражение имеет вид (x {operation} y)
@@ -113,6 +71,27 @@ function equals() {
         alert('Выберите операцию!')
     }
 }
+
+
+function procent() {
+    let output = document.getElementById('output_field').value;
+    if (output.search(/[*]/) != -1) {
+        let input = parseFloat(document.getElementById('input_field').value);
+        // Иначе мы проверяем строку ввода на Not a Number
+        if (isNaN(input)) {
+            input = '';
+            alert("Я не знаю как выполнять математические операции со строками...(");
+        } else {
+            action = input/100;
+            output = eval(output+action);
+            document.getElementById('output_field').value = output;
+            document.getElementById('input_field').value = '';
+        }
+    } else {
+        alert("Нельзя выполнять данную операцию!")
+    }
+}
+
 
 
 // Функция ввода чисел через кнопки, где id - это id кнопки 
@@ -144,3 +123,20 @@ function delete_all() {
      
 }
 
+
+
+
+//----------------------------------------ФУНКЦИИ-УПРОЩЕНИЯ-КОДА--------------------------------------------//
+
+// function check_on_null(input) {
+//     if (input == '') {
+//         // Если строка ввода пуста мы просто добавляем знак действия к строке вывода
+//         document.getElementById('output_field').value = output + action;
+//     } else {
+//         // Иначе мы проверяем строку ввода на Not a Number
+//         if (isNaN(input)) {
+//             input = '';
+//             alert("Я не знаю как выполнять математические операции со строками...(")
+//         }
+//     }
+// }

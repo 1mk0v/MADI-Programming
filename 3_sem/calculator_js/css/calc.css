@@ -1,71 +1,67 @@
 .frame{ 
-    width: 1000px; 
+    width: 420px; 
     height: 595px;
     margin: 200px auto;
     background: #262626; 
     border-radius: 10px;
+    font-family: "Pixels";
    }
 
 .entry_field {
-    width: 980px;
+    width: 400px;
     height: 75px;
     margin: 5px;
     border-radius: 10px;
     border: none;
     padding: auto;
     background-color: #00000000;
-    font-size: 40px;
+    font-size: 30px;
     text-align: right;
     outline: none;
-    color:rgb(187, 0, 255);
+    font-family: "Pixels";
+    color:rgb(13, 0, 255);
 }
 
 .output_field {
-    width: 980px;
+    width: 400px;
     height: 75px;
     margin: 5px;
     border-radius: 10px;
     border: none;
     padding: auto;
     background-color: #00000000;
-    font-size: 40px;
+    font-size: 30px;
     text-align: left;
     resize: none;
     outline: none;
     cursor:default;
-    color: rgb(187, 0, 255);
+    color: rgb(13, 0, 255);
+    font-family: "Pixels";
 }
 
 
 
 .keyboard {
-    width: 980px;
+    width: 400px;
     height: 405px;
     text-align: center;
     margin: 0 auto;
 }
 
 button {
-    background-color: rgb(187, 0, 255);
-    border-radius: 5px;
+    border-radius: 50%;
     border: none;
-    width: 100%;
-    height: 100%;
-    max-height: 100%;
+    width: 78px;
+    height: 78px;
     font-size: 20px;
     font-weight: 600;
     color: #262626;
     cursor: pointer;
+    font-family: "Pixels";
 }
 
-button :hover{
-    background-color: rgb(255, 255, 255);
-    border-radius: 5px;
-    border: none;
-    width: 100%;
-    height: 100%;
-    font-size: 20px;
-    font-weight: 600;
-    color: #262626;
-    cursor: pointer;
+
+@font-face {
+    font-family: "Pixels";
+    src: url(PressStart2P-Regular.ttf);
 }
