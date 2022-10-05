@@ -52,8 +52,6 @@ function equals() {
         document.getElementById('input_field').value = '';   
     }
 
-
-
     // Проверяем значение которое получится при сложении значений полей ввода и вывода на Not a Number
     if (isNaN(output+input)) {
         // Если оно верно, то это значит, что наше выражение имеет вид (x {operation} y)
@@ -99,12 +97,26 @@ function input_numbers(id) {
     // Берем новое веденное число через кнопку и старое число, что уже было введено
     let new_number = id;
     let old_number = document.getElementById('input_field').value;
-    // Проверяем старое число на значение 0, потому что число не может начинаться с 0
-    if (old_number == 0) {
-        document.getElementById('input_field').value = new_number;
-    // Если строе число не 0, тогда просто добавляем к старому числу новое см. ПРИМЕР №1 в README.md
+    let output_nubmer = document.getElementById('output_field').value;
+    // Проверяем строку вывода на пустоту
+    if (output_nubmer == '') {
+        // Проверяем старое число на значение 0, потому что число не может начинаться с 0
+        if (old_number == 0) {
+            document.getElementById('input_field').value = new_number;
+        // Если строе число не 0, тогда просто добавляем к старому числу новое см. ПРИМЕР №1 в README.md
+        } else {
+            document.getElementById('input_field').value = old_number + new_number;
+        }
+    // Если строка не пуста, проверим, что она является числом
     } else {
-        document.getElementById('input_field').value = old_number + new_number;    
+        // Если строка является числом, тогда обнуляем строку вывода и добавляем в строку ввода число из вывода + нововеденное число
+        if (isNaN(output_nubmer) == false) {
+            document.getElementById('output_field').value = '';
+            document.getElementById('input_field').value = output_nubmer + new_number;
+        // Иначе просто добавляем новое число к старому см. ПРИМЕР №1 в README.md
+        } else {
+            document.getElementById('input_field').value = old_number + new_number;
+        }
     }
 }
 
@@ -120,7 +132,14 @@ function delete_all() {
         // Иначе он в строку ввода пишет 0
         document.getElementById('input_field').value = 0;
     }
-     
+}
+
+
+// Функция удаления посимвольно
+function backspace() {
+    let input_field = document.getElementById('input_field').value;
+    input_field = input_field.slice(0, -1);
+    document.getElementById('input_field').value = input_field;
 }
 
 
@@ -177,10 +196,16 @@ document.addEventListener('keydown', function(event) {
         case 'Enter':
             equals();
             break;
+        case 'Backspace':
+            backspace();
+            break;
+        case 'Delete':
+            delete_all();
+            break;
         default:
             // alert(event.key);
             break;
-    }
+        }
     }
 );
 
