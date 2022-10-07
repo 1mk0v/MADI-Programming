@@ -1,4 +1,63 @@
-// Функция действий, где action - это знак действия
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                                                                                          //
+//                                                                                                          //
+//                                           ED.                                                            //
+//                                           E#Wi                                          .  :             //
+//                                           E###G.        t                              ;W  Ef            //
+//                ..       :             ..  E#fD#W;       Ej                 ..         f#E  E#t           //
+//               ,W,     .Et            ;W,  E#t t##L      E#,               ;W,       .E#f   E#t           //
+//              t##,    ,W#t           j##,  E#t  .E#K,    E#t              j##,      iWW;    E#t           //
+//             L###,   j###t          G###,  E#t    j##f   E#t             G###,     L##Lffi  E#t fi        //
+//           .E#j##,  G#fE#t        :E####,  E#t    :E#K:  E#t           :E####,    tLLG##L   E#t L#j       //
+//          ;WW; ##,:K#i E#t       ;W#DG##,  E#t   t##L    E#t          ;W#DG##,      ,W#i    E#t L#L       //
+//         j#E.  ##f#W,  E#t      j###DW##,  E#t .D#W;     E#t         j###DW##,     j#E.     E#tf#E:       //
+//       .D#L    ###K:   E#t     G##i,,G##,  E#tiW#G.      E#t        G##i,,G##,   .D#j       E###f         //
+//      :K#t     ##D.    E#t   :K#K:   L##,  E#K##i        E#t      :K#K:   L##,  ,WK,        E#K,          //
+//      ...      #G      ..   ;##D.    L##,  E##D.         E#t     ;##D.    L##,  EG.         EL            //
+//               j            ,,,      .,,   E#t           ,;.     ,,,      .,,   ,           :             //
+//                                           L:                                                             //
+//                                                                                                          //
+//                                                                                                          //
+//                                              Potapchuk D.A.                                              //
+//                                                                                                          //
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+// Функция ввода чисел через кнопки, где id - это id кнопки см. input_numbers в README
+function input_numbers(id) {
+    // Берем новое веденное число через кнопку и старое число, что уже было введено
+    let new_number = id;
+    let old_number = document.getElementById('input_field').value;
+    let output_nubmer = document.getElementById('output_field').value;
+    // Проверяем строку вывода на пустоту
+    if (output_nubmer == '') {
+        // Проверяем старое число на значение 0, потому что число не может начинаться с 0
+        if (old_number == 0) {
+            document.getElementById('input_field').value = new_number;
+        // Если строе число не 0, тогда просто добавляем к старому числу новое
+        } else {
+            document.getElementById('input_field').value = old_number + new_number;
+        }
+    // Если строка не пуста, проверим, что она является числом
+    } else {
+        // Если строка является числом, тогда обнуляем строку вывода и добавляем в строку ввода число из вывода + нововеденное число
+        if (isNaN(output_nubmer) == false) {
+            document.getElementById('output_field').value = "";
+            document.getElementById('input_field').value = output_nubmer + new_number;
+        // Иначе просто добавляем новое число к старому, при условии, что там нет БЕСКОНЕЧНОСТИ
+        } else {
+            if (output_nubmer == "Бесконечность") {
+                document.getElementById('output_field').value = "";
+                document.getElementById('input_field').value = new_number;
+            } else {
+                document.getElementById('input_field').value = old_number + new_number;
+            }
+        }
+    }
+}
+
+
+// Функция действий, где action - это знак действия, cм. в README.md
 function operation(action) {
     // Берем значения из строки ввода и вывода
     let output = document.getElementById('output_field').value;
@@ -14,8 +73,6 @@ function operation(action) {
             alert("Я не знаю как выполнять математические операции со строками...(")
         }
     }
-
-    //switch case +-*%
 
     // Проверяем строку вывода на пустоту
     if (output == '') {
@@ -33,6 +90,35 @@ function operation(action) {
             document.getElementById('output_field').value = calculation + action;
             document.getElementById('input_field').value = '';
         }
+    }
+}
+
+
+// Функция нахождения процента
+function procent() {
+    let input = parseFloat(document.getElementById('input_field').value);
+    let output = document.getElementById('output_field').value;
+    // Проверяем сроку ввода на Not a Number 
+    if (isNaN(input)) {
+        input = '';
+        alert("Я не знаю как выполнять математические операции со строками...(");
+    // Иначе делим наше число на 100 и выполняем код <output+action>
+    } else {
+        let action = input/100;
+        output = eval(output+action);
+        document.getElementById('output_field').value = output;
+        document.getElementById('input_field').value = '';
+    }
+}
+
+
+// Функция плюс/минус
+function pm() {
+    let input = parseFloat(document.getElementById('input_field').value);
+    // Если число не ноль тогда мы можем поменять у него знак
+    if (input != 0) {
+        input = input*(-1);
+        document.getElementById('input_field').value = input;
     }
 }
 
@@ -71,62 +157,6 @@ function equals() {
 }
 
 
-// Функция нахождения процента
-function procent() {
-    let input = parseFloat(document.getElementById('input_field').value);
-    let output = document.getElementById('output_field').value;
-    // Иначе мы проверяем строку ввода на Not a Number
-    if (isNaN(input)) {
-        input = '';
-        alert("Я не знаю как выполнять математические операции со строками...(");
-    } else {
-        let action = input/100;
-        output = eval(output+action);
-        document.getElementById('output_field').value = output;
-        document.getElementById('input_field').value = '';
-    }
-}
-
-
-// Функция плюс/минус
-function pm() {
-    let input = parseFloat(document.getElementById('input_field').value);
-    if (input != 0) {
-        input = input*(-1);
-        document.getElementById('input_field').value = input;
-    }
-}
-
-
-// Функция ввода чисел через кнопки, где id - это id кнопки 
-function input_numbers(id) {
-    // Берем новое веденное число через кнопку и старое число, что уже было введено
-    let new_number = id;
-    let old_number = document.getElementById('input_field').value;
-    let output_nubmer = document.getElementById('output_field').value;
-    // Проверяем строку вывода на пустоту
-    if (output_nubmer == '') {
-        // Проверяем старое число на значение 0, потому что число не может начинаться с 0
-        if (old_number == 0) {
-            document.getElementById('input_field').value = new_number;
-        // Если строе число не 0, тогда просто добавляем к старому числу новое см. ПРИМЕР №1 в README.md
-        } else {
-            document.getElementById('input_field').value = old_number + new_number;
-        }
-    // Если строка не пуста, проверим, что она является числом
-    } else {
-        // Если строка является числом, тогда обнуляем строку вывода и добавляем в строку ввода число из вывода + нововеденное число
-        if (isNaN(output_nubmer) == false) {
-            document.getElementById('output_field').value = '';
-            document.getElementById('input_field').value = output_nubmer + new_number;
-        // Иначе просто добавляем новое число к старому см. ПРИМЕР №1 в README.md
-        } else {
-            document.getElementById('input_field').value = old_number + new_number;
-        }
-    }
-}
-
-
 // Функция удаления всего
 function delete_all() {
     // Берет значение из строки ввода
@@ -141,9 +171,10 @@ function delete_all() {
 }
 
 
-// Функция удаления посимвольно
+// Функция удаления посимвольно 
 function backspace() {
     let input_field = document.getElementById('input_field').value;
+    // slice оставляет символы от 0 до предпоследнего
     input_field = input_field.slice(0, -1);
     document.getElementById('input_field').value = input_field;
 }
