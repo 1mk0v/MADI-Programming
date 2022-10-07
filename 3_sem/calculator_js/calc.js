@@ -71,25 +71,31 @@ function equals() {
 }
 
 
+// Функция нахождения процента
 function procent() {
+    let input = parseFloat(document.getElementById('input_field').value);
     let output = document.getElementById('output_field').value;
-    if (output.search(/[*]/) != -1) {
-        let input = parseFloat(document.getElementById('input_field').value);
-        // Иначе мы проверяем строку ввода на Not a Number
-        if (isNaN(input)) {
-            input = '';
-            alert("Я не знаю как выполнять математические операции со строками...(");
-        } else {
-            action = input/100;
-            output = eval(output+action);
-            document.getElementById('output_field').value = output;
-            document.getElementById('input_field').value = '';
-        }
+    // Иначе мы проверяем строку ввода на Not a Number
+    if (isNaN(input)) {
+        input = '';
+        alert("Я не знаю как выполнять математические операции со строками...(");
     } else {
-        alert("Нельзя выполнять данную операцию!")
+        let action = input/100;
+        output = eval(output+action);
+        document.getElementById('output_field').value = output;
+        document.getElementById('input_field').value = '';
     }
 }
 
+
+// Функция плюс/минус
+function pm() {
+    let input = parseFloat(document.getElementById('input_field').value);
+    if (input != 0) {
+        input = input*(-1);
+        document.getElementById('input_field').value = input;
+    }
+}
 
 
 // Функция ввода чисел через кнопки, где id - это id кнопки 
@@ -203,7 +209,6 @@ document.addEventListener('keydown', function(event) {
             delete_all();
             break;
         default:
-            // alert(event.key);
             break;
         }
     }
