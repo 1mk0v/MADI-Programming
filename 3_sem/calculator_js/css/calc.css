@@ -18,7 +18,7 @@
     text-align: right;
     outline: none;
     font-family: "Pixels";
-    color:rgb(13, 0, 255);
+    color: white;
 }
 
 .output_field {
@@ -34,7 +34,7 @@
     resize: none;
     outline: none;
     cursor: default;
-    color: rgb(13, 0, 255);
+    color: white;
     font-family: "Pixels";
 }
 

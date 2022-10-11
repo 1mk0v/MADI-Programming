@@ -29,6 +29,11 @@ function input_numbers(id) {
     let new_number = id;
     let old_number = document.getElementById('input_field').value;
     let output_nubmer = document.getElementById('output_field').value;
+
+    if ((old_number.includes(".")) && new_number == ".") {
+        return 0;
+    }
+
     // Проверяем строку вывода на пустоту
     if (output_nubmer == '') {
         // Проверяем старое число на значение 0, потому что число не может начинаться с 0
@@ -42,6 +47,9 @@ function input_numbers(id) {
     } else {
         // Если строка является числом, тогда обнуляем строку вывода и добавляем в строку ввода число из вывода + нововеденное число
         if (isNaN(output_nubmer) == false) {
+            if ((output_nubmer.includes(".")) && new_number == ".") {
+                new_number = "";
+            }
             document.getElementById('output_field').value = "";
             document.getElementById('input_field').value = output_nubmer + new_number;
         // Иначе просто добавляем новое число к старому, при условии, что там нет БЕСКОНЕЧНОСТИ
@@ -62,17 +70,19 @@ function operation(action) {
     // Берем значения из строки ввода и вывода
     let output = document.getElementById('output_field').value;
     let input = document.getElementById('input_field').value;
-    // Проверяем на пустоту строку ввода
-    if (input == '') {
-        // Если строка ввода пуста мы просто добавляем знак действия к строке вывода
-        document.getElementById('output_field').value = output + action;
-    } else {
-        // Иначе мы проверяем строку ввода на Not a Number
-        if (isNaN(input)) {
-            input = '';
-            alert("Я не знаю как выполнять математические операции со строками...(")
+
+        // Проверяем на пустоту строку ввода
+        if (input == '') {
+            // Если строка ввода пуста мы просто добавляем знак действия к строке вывода
+            document.getElementById('output_field').value = output + action;
+        } else {
+            // Иначе мы проверяем строку ввода на Not a Number
+            if (isNaN(input)) {
+                input = '';
+                alert("Я не знаю как выполнять математические операции со строками...(")
+            }
         }
-    }
+
 
     // Проверяем строку вывода на пустоту
     if (output == '') {
@@ -83,13 +93,16 @@ function operation(action) {
         document.getElementById('input_field').value = ''
     } else {
         // Если ложно, тогда считаем выполняем код (output+input)
-        let calculation =  eval(output+input);
-        if (calculation == 1/0) {
-            alert("Бесконечность не предел")
-        } else {
-            document.getElementById('output_field').value = calculation + action;
-            document.getElementById('input_field').value = '';
+        if (isNaN(output[output.length - 1])){
+            let calculation =  eval(parseFloat(output)+output[output.length - 1]+input);
+            if (calculation == 1/0) {
+                alert("Бесконечность не предел")
+            } else {
+                document.getElementById('output_field').value = calculation + action;
+                document.getElementById('input_field').value = '';
+            }
         }
+
     }
 }
 
@@ -143,11 +156,11 @@ function equals() {
         // Если оно верно, то это значит, что наше выражение имеет вид (x {operation} y)
 
         // Проверяем результат (x {operation} y) на деление на ноль 
-        if (eval(output+input) == Infinity) {
+        if (eval(parseFloat(output)+output[output.length-1]+input) == Infinity) {
             document.getElementById('output_field').value = 'Бесконечность';
         } else {
             // Если он не находит ошибки Infinity, тогда можем вывести полученное число в поле вывода
-            document.getElementById('output_field').value = eval(output + input);
+            document.getElementById('output_field').value = eval(parseFloat(output)+output[output.length-1]+input);
         }
 
     // Если оно соответствует типу Number, тогда это значит, что пользователь не ввёл операцию
@@ -244,18 +257,3 @@ document.addEventListener('keydown', function(event) {
         }
     }
 );
-
-//----------------------------------------ФУНКЦИИ-УПРОЩЕНИЯ-КОДА--------------------------------------------//
-
-// function check_on_null(input) {
-//     if (input == '') {
-//         // Если строка ввода пуста мы просто добавляем знак действия к строке вывода
-//         document.getElementById('output_field').value = output + action;
-//     } else {
-//         // Иначе мы проверяем строку ввода на Not a Number
-//         if (isNaN(input)) {
-//             input = '';
-//             alert("Я не знаю как выполнять математические операции со строками...(")
-//         }
-//     }
-// }
