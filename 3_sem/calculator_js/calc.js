@@ -37,11 +37,16 @@ function input_numbers(id) {
         return;
     }
 
+    if (old_number == '' && new_number == ".") {
+        document.getElementById('input_field').value = '0'+ new_number;
+        return
+    }
+
     // Проверяем строку вывода на пустоту
     if (output_nubmer == '') {
 
         // Проверяем старое число на значение 0, потому что число не может начинаться с 0
-        if (old_number == 0) {
+        if (old_number == '0' && new_number != ".") {
             document.getElementById('input_field').value = new_number;
         // Если строе число не 0, тогда просто добавляем к старому числу новое
         } else {
@@ -68,7 +73,6 @@ function input_numbers(id) {
                 document.getElementById('input_field').value = old_number + new_number;
             }
         }
-
     }
 }
 
@@ -114,7 +118,7 @@ function operation(action) {
             if (calculation == 1/0 || calculation == -1/0) {
                 document.getElementById('output_field').value = "Бесконечность";
             } else {
-                document.getElementById('output_field').value = calculation + action;
+                document.getElementById('output_field').value = parseFloat(calculation) + action;
                 document.getElementById('input_field').value = '';
             }
         return;
@@ -123,20 +127,27 @@ function operation(action) {
     
 
 
-//---------------------------------ФУНКЦИЯ-ВВОДА-ЧИСЕЛ-------------------------------------------//
+//---------------------------------ФУНКЦИЯ-ПРОЦЕНТА-------------------------------------------//
 
 function procent() {
     let input = parseFloat(document.getElementById('input_field').value);
     let output = document.getElementById('output_field').value;
+    let output_num = parseFloat(output);
+    
+    if (isNaN(output_num)) {
+        alert("Я не умею искать процент от ничего!");
+        return;
+    }
     // Проверяем сроку ввода на Not a Number 
     if (isNaN(input)) {
         input = '';
         alert("Я не знаю как выполнять математические операции со строками...(");
     // Иначе делим наше число на 100 и выполняем код <output+action>
     } else {
-        let action = input/100;
-        output = eval(output+action);
-        document.getElementById('output_field').value = output;
+        let action = output_num*(input/100);
+        output = parseFloat(eval(output+action));
+        output = output.toFixed(13)
+        document.getElementById('output_field').value = parseFloat(output);
         document.getElementById('input_field').value = '';
     }
 }
@@ -183,7 +194,7 @@ function equals() {
         } else {
             output = eval(parseFloat(output)+output[output.length-1]+input);
             // Если он не находит ошибки Infinity, тогда можем вывести полученное число в поле вывода
-            document.getElementById('output_field').value = output;
+            document.getElementById('output_field').value = parseFloat(output.toFixed(13));
         }
 
     // Если оно соответствует типу Number, тогда это значит, что пользователь не ввёл операцию
@@ -198,14 +209,17 @@ function equals() {
 
 function delete_all() {
     // Берет значение из строки ввода
-    let input_field = document.getElementById('input_field').value;
-    // Если в строке ввода 0, тогда он удаляет все содержимое в строке выводе
-    if (input_field == 0) {
-        document.getElementById('output_field').value = '';
-    } else {
-        // Иначе он в строку ввода пишет 0
-        document.getElementById('input_field').value = 0;
-    }
+    document.getElementById('input_field').value = '';
+    document.getElementById('output_field').value = '';
+
+    // let input_field = document.getElementById('input_field').value;
+    // // Если в строке ввода 0, тогда он удаляет все содержимое в строке выводе
+    // if (input_field == 0) {
+    //     document.getElementById('output_field').value = '';
+    // } else {
+    //     // Иначе он в строку ввода пишет 0
+    //     document.getElementById('input_field').value = 0;
+    // }
 }
 
 
