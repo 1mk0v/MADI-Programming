@@ -24,27 +24,26 @@
 
 
 
-
 //---------------------------------ФУНКЦИЯ-ВВОДА-ЧИСЕЛ-------------------------------------------//
 
 function input_numbers(id) {
+    if (id == '[object PointerEvent]') {
+        id = this.id
+    }
+    
     // Берем новое веденное число через кнопку и старое число, что уже было введено
     let new_number = id;
     let old_number = document.getElementById('input_field').value;
     let output_nubmer = document.getElementById('output_field').value;
-
     if ((old_number.includes(".")) && new_number == ".") {
         return;
     }
-
     if (old_number == '' && new_number == ".") {
         document.getElementById('input_field').value = '0'+ new_number;
         return
     }
-
     // Проверяем строку вывода на пустоту
     if (output_nubmer == '') {
-
         // Проверяем старое число на значение 0, потому что число не может начинаться с 0
         if (old_number == '0' && new_number != ".") {
             document.getElementById('input_field').value = new_number;
@@ -52,10 +51,8 @@ function input_numbers(id) {
         } else {
             document.getElementById('input_field').value = old_number + new_number;
         }
-
     // Если строка не пуста, проверим, что она является числом
     } else {
-
         // Если строка является числом, тогда обнуляем строку вывода и добавляем в строку ввода число из вывода + нововеденное число
         if (isNaN(output_nubmer) == false) {
             if ((output_nubmer.includes(".")) && new_number == ".") {
@@ -65,7 +62,6 @@ function input_numbers(id) {
             document.getElementById('input_field').value = output_nubmer + new_number;
         // Иначе просто добавляем новое число к старому, при условии, что там нет БЕСКОНЕЧНОСТИ
         } else {
-
             if (output_nubmer == "Бесконечность") {
                 document.getElementById('output_field').value = "";
                 document.getElementById('input_field').value = new_number;
@@ -75,22 +71,19 @@ function input_numbers(id) {
         }
     }
 }
-
-
-
 //---------------------------------ФУНКЦИЯ-ДЕЙСТВИЙ----------------------------------------------//
-
 function operation(action) {
+    if (action == '[object PointerEvent]') {
+        action = this.id
+    }
     // Берем значения из строки ввода и вывода
     let output = document.getElementById('output_field').value;
     let input = document.getElementById('input_field').value;
-
     // Две строки пусты
     if ((input == '') && (output == '') && (action == '-')) {
         document.getElementById('input_field').value = action;
         return;
     }
-
     // Строка ввода пуста
     if ((input == '') && (output != '')) {
         // Если строка ввода пуста мы просто добавляем знак действия к строке вывода
@@ -102,7 +95,6 @@ function operation(action) {
         }
         return;
     }
-
     // Строка вывода пуста
     if ((input != '-') && (output == '')) {
         output = input;
@@ -111,7 +103,6 @@ function operation(action) {
         document.getElementById('input_field').value = input;
         return;
     }
-
     // Две строки не пусты
     if ((input != '') && (output != '')) {
         let calculation =  eval(parseFloat(output)+output[output.length - 1]+input);
@@ -124,21 +115,16 @@ function operation(action) {
         return;
     }
 }
-    
-
-
 //---------------------------------ФУНКЦИЯ-ПРОЦЕНТА-------------------------------------------//
-
 function procent() {
     let input = parseFloat(document.getElementById('input_field').value);
     let output = document.getElementById('output_field').value;
     let output_num = parseFloat(output);
-    
     if (isNaN(output_num)) {
         alert("Я не умею искать процент от ничего!");
         return;
     }
-    // Проверяем сроку ввода на Not a Number 
+    // Проверяем сроку ввода на Not a Number alert(numbers)
     if (isNaN(input)) {
         input = '';
         alert("Я не знаю как выполнять математические операции со строками...(");
@@ -151,11 +137,7 @@ function procent() {
         document.getElementById('input_field').value = '';
     }
 }
-
-
-
 //---------------------------------ФУНКЦИЯ-ПЛЮС/МИНУС-------------------------------------------//
-
 function pm() {
     let input = parseFloat(document.getElementById('input_field').value);
     // Если число не ноль тогда мы можем поменять у него знак
@@ -164,17 +146,11 @@ function pm() {
         document.getElementById('input_field').value = input;
     }
 }
-
-
-
 //---------------------------------ФУНКЦИЯ-РАВНО-------------------------------------------//
-
 function equals() {
-
     // Берем значение из строки ввода 
     let input = parseFloat(document.getElementById('input_field').value);
     let output = document.getElementById('output_field').value;
-
     // Проверяем значение из строки ввода на пустоту
     if (isNaN(input)) {
         alert('Введите число!')
@@ -183,11 +159,9 @@ function equals() {
         // Если значение из строки ввода не строка, тогда присваиваем значению из поля ввода пустую строку
         document.getElementById('input_field').value = '';   
     }
-
     // Проверяем значение которое получится при сложении значений полей ввода и вывода на Not a Number
     if (isNaN(output+input)) {
         // Если оно верно, то это значит, что наше выражение имеет вид (x {operation} y)
-
         // Проверяем результат (x {operation} y) на деление на ноль 
         if ((eval(parseFloat(output)+output[output.length-1]+input) == Infinity) || (eval(parseFloat(output)+output[output.length-1]+input) == -Infinity)) {
             document.getElementById('output_field').value = 'Бесконечность';
@@ -196,22 +170,16 @@ function equals() {
             // Если он не находит ошибки Infinity, тогда можем вывести полученное число в поле вывода
             document.getElementById('output_field').value = parseFloat(output.toFixed(13));
         }
-
     // Если оно соответствует типу Number, тогда это значит, что пользователь не ввёл операцию
     } else {
         alert('Выберите операцию!')
     }
 }
-
-
-
 //---------------------------------ФУНКЦИЯ-УДАЛЕНИЯ-ВСЕГО-------------------------------------------//
-
 function delete_all() {
     // Берет значение из строки ввода
     document.getElementById('input_field').value = '';
     document.getElementById('output_field').value = '';
-
     // let input_field = document.getElementById('input_field').value;
     // // Если в строке ввода 0, тогда он удаляет все содержимое в строке выводе
     // if (input_field == 0) {
@@ -221,22 +189,14 @@ function delete_all() {
     //     document.getElementById('input_field').value = 0;
     // }
 }
-
-
-
 //---------------------------------ФУНКЦИЯ-УДАЛЕНИЯ-ПОСИМВОЛЬНО-------------------------------------------//
-
 function backspace() {
     let input_field = document.getElementById('input_field').value;
     // slice оставляет символы от 0 до предпоследнего
     input_field = input_field.slice(0, -1);
     document.getElementById('input_field').value = input_field;
 }
-
-
-
 //----------------------------------ОПАСНАЯ-ШТУКА-ВВОД-С-КЛАВИАТУРЫ-------------------------------------------//
-
 document.addEventListener('keydown', function(event) {
     switch (event.key) {
         case '0':
@@ -298,3 +258,26 @@ document.addEventListener('keydown', function(event) {
         }
     }
 );
+
+
+
+//------------------------------------------ONCLICK-------------------------------------------//
+
+window.onload = function() {
+
+    let numbers = document.getElementsByClassName("number");
+    for (let i = 0; i < numbers.length; i++) {
+        numbers[i].addEventListener('click', input_numbers);
+    }
+    
+    let operations = document.getElementsByClassName("operation");
+    for (let i = 0; i < operations.length; i++) {
+        operations[i].addEventListener('click', operation);
+    }
+
+    document.getElementById("procent").addEventListener('click', procent);
+    document.getElementById("pm").addEventListener('click', pm);
+    document.getElementById("delete").addEventListener('click', delete_all);
+    document.getElementById("output").addEventListener('click', equals);
+}
+
