@@ -83,7 +83,7 @@ function input_numbers(id) {
 //---------------------------------ФУНКЦИЯ-ДЕЙСТВИЙ----------------------------------------------//
 function operation(action) {
 
-    if (typeof id == 'object') {
+    if (typeof action == 'object') {
         action = this.id;
     }
 
@@ -91,12 +91,16 @@ function operation(action) {
     let output = document.getElementById('output_field').value;
     let input = document.getElementById('input_field').value;
 
-    // Две строки пусты
+    // Две строки пусты и знак действия '-'
     if ((input == '') && (output == '') && (action == '-')) {
         document.getElementById('input_field').value = action;
         return;
     }
 
+    if ((input == '') && (output == '')) {
+        alert('Введите число!')
+        return;
+    }
     // Строка ввода пуста
     if ((input == '') && (output != '')) {
         // Если строка ввода пуста мы просто добавляем знак действия к строке вывода
@@ -161,9 +165,16 @@ function procent() {
 function pm() {
     let input = parseFloat(document.getElementById('input_field').value);
     // Если число не ноль тогда мы можем поменять у него знак
-    if (input != 0) {
+    if (input != 0 && input == input) {
         input = input*(-1);
         document.getElementById('input_field').value = input;
+        return;
+    }
+
+    if (isNaN(input)) {
+        input = '';
+        document.getElementById('input_field').value = input;
+        return;
     }
 }
 
@@ -219,8 +230,9 @@ function backspace() {
 }
 
 
-//----------------------------------ОПАСНАЯ-ШТУКА-ВВОД-С-КЛАВИАТУРЫ-------------------------------------------//
-document.addEventListener('keydown', function(event) {
+//----------------------------------------ВВОД-С-КЛАВИАТУРЫ-------------------------------------------//
+
+function input_keyboard(event) {
     switch (event.key) {
         case '0':
             input_numbers(event.key);
@@ -279,8 +291,9 @@ document.addEventListener('keydown', function(event) {
         default:
             break;
         }
-    }
-);
+}
+
+document.addEventListener('keydown', input_keyboard);
 
 
 
