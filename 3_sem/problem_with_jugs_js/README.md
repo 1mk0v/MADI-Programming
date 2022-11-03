@@ -21,4 +21,4 @@
 
 ## БЛОК СХЕМА
 
-<img src="schema.svg" alt="Alt text" title="Optional title">
+<img src="schema.svg" alt="" title="Block scheme">

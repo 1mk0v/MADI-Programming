@@ -23,9 +23,28 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//КОНСТАНТЫ
+
+let maxLitersOfFirstJug;
+let maxLitersOfSecondJug;
+let requiredLiters;
+const text = "You enter liters\nFor first jug: "+maxLitersOfFirstJug+"\nFor second jug: "+maxLitersOfSecondJug+"\nWhich you want to find: "+requiredLiters;
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//ГЛАВНАЯ ФУНКЦИЯ 
+
+function main() {
+    let litersOfFirstJug = 0;
+    let litersOfSecondJug = 0;
+}
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ
 
 //ВВОД ДО ТЕХ ПОР, ПОКА НЕ СТАНЕТ ВЕРНЫМ
 function inputLitersOf(text, def) {
@@ -47,36 +66,18 @@ function inputLitersOf(text, def) {
 
 //КОГДА ПРОГРУЗИТСЯ СТРАНИЦА
 window.onload = function() {
-    let litersOfFirstJug = inputLitersOf("Enter the number of liters for first jug", 5);
-    let litersOfSecondJug = inputLitersOf("Enter the number of liters for first jug", 2);
-    let requiredLiters = inputLitersOf("Enter the number of liters you want to find", 3);
-    const text = "You enter liters\nFor first jug: "+litersOfFirstJug+"\nFor second jug: "+litersOfSecondJug+"\nWhich you want to find: "+requiredLiters;
+    maxLitersOfFirstJug = inputLitersOf("Enter the number of liters for first jug", 5);
+    maxLitersOfSecondJug = inputLitersOf("Enter the number of liters for first jug", 2);
+    requiredLiters = inputLitersOf("Enter the number of liters you want to find", 3);
+    
 
     //ОБРАБОТКА ОШИБОК
 
-    if (litersOfFirstJug == litersOfSecondJug && requiredLiters != litersOfSecondJug) {
-        alert('You will only be able to find '+litersOfFirstJug+' liters');
+    if ((requiredLiters > maxLitersOfFirstJug && requiredLiters > maxLitersOfSecondJug) || (requiredLiters < 0 || maxLitersOfFirstJug < 0 || maxLitersOfSecondJug < 0)) {
+        alert('Impossible conditions');
         location.reload();
+    } else {
+        return main();
     }
-
-    if (litersOfFirstJug == 0 || litersOfSecondJug == 0) {
-        alert('You cant find anything');
-        location.reload();
-    }
-
-    if (litersOfFirstJug < 0 || litersOfSecondJug < 0 || requiredLiters < 0)  {
-        alert('What are you even thinking, PSYCHO!');
-        location.reload();
-    }
-
-    if (litersOfFirstJug%2 == 0 && litersOfSecondJug%2 == 0 && requiredLiters%2 != 0) {
-        alert('You can only find even numbers!');
-        location.reload();
-    }
-
-    // if (litersOfFirstJug%2 != 0 && litersOfSecondJug%2 != 0 && requiredLiters%2 == 0) {
-    //     alert('You can only find odd numbers!');
-    //     location.reload();
-    // }
 }
 
