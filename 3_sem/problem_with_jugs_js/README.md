@@ -21,4 +21,4 @@
 
 ## БЛОК СХЕМА
 
-	![SCHEMA](schema.svg)
+<img src="schema.svg" alt="Alt text" title="Optional title">
