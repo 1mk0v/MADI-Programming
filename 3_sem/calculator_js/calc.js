@@ -27,6 +27,8 @@
 
 const infinity_str = "Бесконечность";
 
+let last_action; 
+
 //---------------------------------ФУНКЦИЯ-ВВОДА-ЧИСЕЛ-------------------------------------------//
 
 function input_numbers(id) {
@@ -44,11 +46,7 @@ function input_numbers(id) {
         return;
     }
 
-    if (old_number == '' && new_number == ".") {
-        document.getElementById('input_field').value = '0'+ new_number;
-        return;
-    }
-
+    
     // Проверяем строку вывода на пустоту
     if (output_nubmer == '') {
         // Проверяем старое число на значение 0, потому что число не может начинаться с 0
@@ -56,12 +54,16 @@ function input_numbers(id) {
             document.getElementById('input_field').value = new_number;
         // Если строе число не 0, тогда просто добавляем к старому числу новое
         } else {
+            if (old_number == '' && new_number == ".") {
+                old_number = '0';
+            }
             document.getElementById('input_field').value = old_number + new_number;
         }
     // Если строка не пуста, проверим, что она является числом
     } else {
         // Если строка является числом, тогда обнуляем строку вывода и добавляем в строку ввода число из вывода + нововеденное число
         if (isNaN(output_nubmer) == false) {
+            
             if ((output_nubmer.includes(".")) && new_number == ".") {
                 new_number = "";
             }
@@ -69,9 +71,17 @@ function input_numbers(id) {
             document.getElementById('input_field').value = output_nubmer + new_number;
         // Иначе просто добавляем новое число к старому, при условии, что там нет БЕСКОНЕЧНОСТИ
         } else {
+            if (old_number == '' && new_number == ".") {    
+                document.getElementById('input_field').value = '0'+ new_number;
+            }
+
             if (output_nubmer == infinity_str) {
                 document.getElementById('output_field').value = "";
-                document.getElementById('input_field').value = new_number;
+                if (new_number == ".") {   
+                    document.getElementById('input_field').value = "0" + new_number;    
+                } else {
+                    document.getElementById('input_field').value = new_number;
+                }
             } else {
                 document.getElementById('input_field').value = old_number + new_number;
             }
@@ -101,8 +111,16 @@ function operation(action) {
         alert('Введите число!')
         return;
     }
+
+    if (output == infinity_str) {
+        alert('Введите число!');
+        output = '';
+        document.getElementById('output_field').value = output;
+        return;
+    }
+
     // Строка ввода пуста
-    if ((input == '') && (output != '')) {
+    if (input == '') {
         // Если строка ввода пуста мы просто добавляем знак действия к строке вывода
         if (isNaN(output)){
             output = output.slice(0, -1) + action;
@@ -114,7 +132,7 @@ function operation(action) {
     }
 
     // Строка вывода пуста
-    if ((input != '-') && (output == '')) {
+    if (input != '-' && output == '') {
         output = input;
         input = '';
         document.getElementById('output_field').value = output + action;
@@ -123,15 +141,12 @@ function operation(action) {
     }
 
     // Две строки не пусты
-    if ((input != '') && (output != '')) {
-        let calculation =  eval(parseFloat(output)+output[output.length - 1]+input);
-            if (calculation == 1/0 || calculation == -1/0) {
-                document.getElementById('output_field').value = infinity_str;
-            } else {
-                document.getElementById('output_field').value = parseFloat(calculation) + action;
-                document.getElementById('input_field').value = '';
-            }
-        return;
+    let calculation =  eval(parseFloat(output)+output[output.length - 1]+input);
+    if (calculation == 1/0 || calculation == -1/0) {
+        document.getElementById('output_field').value = infinity_str;
+    } else {
+        document.getElementById('output_field').value = parseFloat(calculation) + action;
+        document.getElementById('input_field').value = '';
     }
 }
 
@@ -147,8 +162,7 @@ function procent() {
     }
 
     // Проверяем сроку ввода на Not a Number alert(numbers)
-    if (isNaN(input)) {
-        input = '';
+    if (!input) {
         alert("Я не знаю как выполнять математические операции со строками...(");
     // Иначе делим наше число на 100 и выполняем код <output+action>
     } else {
@@ -166,7 +180,7 @@ function pm() {
     let input = parseFloat(document.getElementById('input_field').value);
     // Если число не ноль тогда мы можем поменять у него знак
     if (input != 0 && input == input) {
-        input = input*(-1);
+        input = -1*input;
         document.getElementById('input_field').value = input;
         return;
     }
@@ -186,7 +200,8 @@ function equals() {
     let output = document.getElementById('output_field').value;
     // Проверяем значение из строки ввода на пустоту
     if (isNaN(input)) {
-        alert('Введите число!');
+        output = eval(output + last_action);
+        document.getElementById('output_field').value = output;
         return;
     } else {
         // Если значение из строки ввода не строка, тогда присваиваем значению из поля ввода пустую строку
@@ -198,14 +213,15 @@ function equals() {
         // Если оно верно, то это значит, что наше выражение имеет вид (x {operation} y)
         // Проверяем результат (x {operation} y) на деление на ноль 
         
-        verif_oper = eval(parseFloat(output)+output[output.length-1]+input)
+        let verif_oper = eval(parseFloat(output)+output[output.length-1]+input);
 
+        last_action = output[output.length-1]+input;
         if ((verif_oper == Infinity) || (verif_oper == -Infinity)) {
             document.getElementById('output_field').value = infinity_str;
         } else {
-            output = eval(parseFloat(output)+output[output.length-1]+input);
+            // output = eval(parseFloat(output)+output[output.length-1]+input);
             // Если он не находит ошибки Infinity, тогда можем вывести полученное число в поле вывода
-            document.getElementById('output_field').value = parseFloat(output.toFixed(13));
+            document.getElementById('output_field').value = parseFloat(verif_oper.toFixed(13));
         }
     // Если оно соответствует типу Number, тогда это значит, что пользователь не ввёл операцию
     } else {
