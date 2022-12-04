@@ -22,32 +22,146 @@
 //                                                                                                          //
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-//КОНСТАНТЫ
+//КОНСТАНТЫ ЛИТРОВ
+let maxLitersOfFirstJug = 0;
+let maxLitersOfSecondJug = 0;
+let requiredLiters = 0;
 
-let maxLitersOfFirstJug;
-let maxLitersOfSecondJug;
-let requiredLiters;
-const text = "You enter liters\nFor first jug: "+maxLitersOfFirstJug+"\nFor second jug: "+maxLitersOfSecondJug+"\nWhich you want to find: "+requiredLiters;
+
+//КОНСТАНТЫ КУВШИНОВ
+let divOfFirstJug = document.getElementById('firstJug');
+let divOfSecondJug = document.getElementById('secondJug');
+
+
+//КОНСТАНТЫ ОШИБОК
+const impossible = "Impossible conditions";
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-//ГЛАВНАЯ ФУНКЦИЯ 
 
 function main() {
+
+    if (!Checking.prototype.firstCheckVolumeOfJugs(maxLitersOfFirstJug, maxLitersOfSecondJug)) {
+        alert('You need to enter volume of jugs!');
+        return;
+    }
+
+
+    let oneLiterInProcentFirst = 100/maxLitersOfFirstJug;
+    let oneLiterInProcentSecond = 100/maxLitersOfSecondJug;
+
+    let divOfWaterInFirstJug = document.getElementById('waterOfFirstJug');
+    let divOfWaterInSecondJug = document.getElementById('waterOfSecondJug');
     let litersOfFirstJug = 0;
     let litersOfSecondJug = 0;
+
+
+    printWater(divOfWaterInFirstJug, divOfWaterInSecondJug, litersOfFirstJug,litersOfSecondJug, oneLiterInProcentFirst, oneLiterInProcentSecond);
+    printInJugs(divOfWaterInFirstJug, divOfWaterInSecondJug, litersOfFirstJug, litersOfSecondJug);
+    // print_text(litersOfFirstJug, litersOfSecondJug);
+
+    litersOfSecondJug = litersOfSecondJug + maxLitersOfSecondJug;
+
+    printWater(divOfWaterInFirstJug, divOfWaterInSecondJug, litersOfFirstJug,litersOfSecondJug, oneLiterInProcentFirst, oneLiterInProcentSecond);
+    printInJugs(divOfWaterInFirstJug, divOfWaterInSecondJug, litersOfFirstJug, litersOfSecondJug);
+    // print_text(litersOfFirstJug, litersOfSecondJug);
+
+    while (litersOfFirstJug != requiredLiters || litersOfSecondJug != requiredLiters) {
+
+        if (litersOfFirstJug == maxLitersOfFirstJug) {
+            litersOfFirstJug = 0;
+            if (litersOfSecondJug == 0) {
+                alert(impossible);
+                return;
+            }
+        }
+
+        if (litersOfFirstJug + litersOfSecondJug > maxLitersOfFirstJug) {
+            litersOfSecondJug = litersOfSecondJug - (maxLitersOfFirstJug - litersOfFirstJug);
+            litersOfFirstJug = litersOfFirstJug +(maxLitersOfFirstJug-litersOfFirstJug);
+            if (litersOfFirstJug == requiredLiters || litersOfSecondJug == requiredLiters) {
+                findedIn(litersOfFirstJug);
+                return;
+            }
+            printWater(divOfWaterInFirstJug, divOfWaterInSecondJug, litersOfFirstJug,litersOfSecondJug, oneLiterInProcentFirst, oneLiterInProcentSecond);
+            printInJugs(divOfWaterInFirstJug, divOfWaterInSecondJug, litersOfFirstJug, litersOfSecondJug);
+            // print_text(litersOfFirstJug, litersOfSecondJug);
+        } else {
+            litersOfFirstJug = litersOfFirstJug + litersOfSecondJug;
+            litersOfSecondJug = 0;
+            printWater(divOfWaterInFirstJug, divOfWaterInSecondJug, litersOfFirstJug,litersOfSecondJug, oneLiterInProcentFirst, oneLiterInProcentSecond);
+            printInJugs(divOfWaterInFirstJug, divOfWaterInSecondJug, litersOfFirstJug, litersOfSecondJug);
+            // print_text(litersOfFirstJug, litersOfSecondJug);
+            if (litersOfFirstJug == requiredLiters || litersOfSecondJug == requiredLiters) {
+                findedIn(litersOfFirstJug);
+                return;
+            }
+            litersOfSecondJug = litersOfSecondJug+maxLitersOfSecondJug;
+            printWater(divOfWaterInFirstJug, divOfWaterInSecondJug, litersOfFirstJug,litersOfSecondJug, oneLiterInProcentFirst, oneLiterInProcentSecond);
+            printInJugs(divOfWaterInFirstJug, divOfWaterInSecondJug, litersOfFirstJug, litersOfSecondJug);
+            // print_text(litersOfFirstJug, litersOfSecondJug);
+            if (litersOfFirstJug == requiredLiters || litersOfSecondJug == requiredLiters) {
+                findedIn(litersOfFirstJug);
+                return;
+            }
+        }
+    }
 }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-//ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ
+// function sleep(delay) { //милисекунды
+    // let time = Date.now();
+    // let currentTime = null;
+// 
+    // do {
+        // currentTime = Date.now();
+    // } while (currentTime - time < delay);
+// }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+function printWater(divOfWaterInFirstJug, divOfWaterInSecondJug, litersOfFirstJug,litersOfSecondJug, oneLiterInProcentFirst, oneLiterInProcentSecond) {
+
+    if (litersOfFirstJug == 0) { 
+        divOfWaterInFirstJug.style.backgroundColor = '#00000000';
+    } else {
+        divOfWaterInFirstJug.style.backgroundColor = 'blue';
+    }
+
+    if (litersOfSecondJug == 0) {
+        divOfWaterInSecondJug.style.backgroundColor = '#00000000';
+    } else { 
+        divOfWaterInSecondJug.style.backgroundColor = 'blue';
+    }
+
+    divOfWaterInFirstJug.style.height = `${litersOfFirstJug * oneLiterInProcentFirst}%`;
+    divOfWaterInSecondJug.style.height = `${litersOfSecondJug * oneLiterInProcentSecond}%`;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+function findedIn(litersOfFirstJug) {
+    if (litersOfFirstJug == requiredLiters) {
+        alert('Find in first Jug');
+    } else { 
+        alert('Find in second Jug');
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+function printInJugs(divOfFirstJug, divOfSecondJug, litersOfFirstJug, litersOfSecondJug) {
+    divOfFirstJug.innerHTML = litersOfFirstJug;
+    divOfSecondJug.innerHTML = litersOfSecondJug;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //ВВОД ДО ТЕХ ПОР, ПОКА НЕ СТАНЕТ ВЕРНЫМ
-function inputLitersOf(text, def) {
+function inputVolumeOfJug(text, def) {
     let flag = true;
     let liters;
     while (flag) {
@@ -64,20 +178,55 @@ function inputLitersOf(text, def) {
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-//КОГДА ПРОГРУЗИТСЯ СТРАНИЦА
-window.onload = function() {
-    maxLitersOfFirstJug = inputLitersOf("Enter the number of liters for first jug", 5);
-    maxLitersOfSecondJug = inputLitersOf("Enter the number of liters for first jug", 2);
-    requiredLiters = inputLitersOf("Enter the number of liters you want to find", 3);
-    
+function preparationForWork() {
+    maxLitersOfFirstJug = inputVolumeOfJug("Enter the number of liters for first jug", 5);
+    maxLitersOfSecondJug = inputVolumeOfJug("Enter the number of liters for first jug", 2);
+    requiredLiters = inputVolumeOfJug("Enter the number of liters you want to find", 3);  
 
     //ОБРАБОТКА ОШИБОК
-
-    if ((requiredLiters > maxLitersOfFirstJug && requiredLiters > maxLitersOfSecondJug) || (requiredLiters < 0 || maxLitersOfFirstJug < 0 || maxLitersOfSecondJug < 0)) {
-        alert('Impossible conditions');
-        location.reload();
-    } else {
-        return main();
+    switch (Checking.prototype.secondCheckVolumeOfJugs(maxLitersOfFirstJug, maxLitersOfSecondJug, requiredLiters)){
+        case "err1":
+            alert('Error!\nYou cant find an odd number of liters');
+            break;
+        case "err2":
+            alert('Error!\nYou cant find an even number of liters');
+            break;
+        case "err3":
+            alert('Error!\nYou cant find more liters than there are in your jugs');
+            break;
+        case "err4":
+            alert('Error!\nYou cant find negative liters');
+            break;
+        case "err5":
+            alert('Error!\nYou cant find this liters');
+            break;
+        default:
+            break;
     }
+
+    if (maxLitersOfFirstJug < maxLitersOfSecondJug) {
+        maxLitersOfFirstJug = maxLitersOfFirstJug + maxLitersOfSecondJug;
+        maxLitersOfSecondJug = maxLitersOfFirstJug - maxLitersOfSecondJug;
+        maxLitersOfFirstJug = maxLitersOfFirstJug - maxLitersOfSecondJug;
+        alert('Okey, now first jug is second and second jug is first');
+    }
+    
+    document.getElementById('firstJug').style.height = `100%`;
+    document.getElementById('secondJug').style.height = `${100/maxLitersOfFirstJug*maxLitersOfSecondJug}%`;
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+function print_text(litersOfFirstJug, litersOfSecondJug) {
+    a = alert(`First jug = ${litersOfFirstJug}\nSecond Jug = ${litersOfSecondJug}`);
+    return a;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+function clicks() {
+    document.getElementById('start').addEventListener('click', main);
+    document.getElementById('input').addEventListener('click', preparationForWork);
+}
+
+document.addEventListener('DOMContentLoaded', clicks);

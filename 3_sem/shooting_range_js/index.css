@@ -1,0 +1,22 @@
+#field {
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 70vh;
+    width: 70vw;
+    background-color: white;
+}
+
+body {
+    background-color: #555555;
+}
+
+#rabbit {
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    box-shadow: none;
+    background-color: aqua;
+    border: 0px;
+}

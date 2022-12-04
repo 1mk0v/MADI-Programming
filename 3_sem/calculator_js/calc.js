@@ -82,11 +82,12 @@ function input_numbers(id) {
                 } else {
                     document.getElementById('input_field').value = new_number;
                 }
-            } else {
-                document.getElementById('input_field').value = old_number + new_number;
-            }
+            // } else {
+            //     document.getElementById('input_field').value = old_number + new_number;
+            // }
         }
     }
+}
 }
 
 
@@ -216,6 +217,7 @@ function equals() {
         let verif_oper = eval(parseFloat(output)+output[output.length-1]+input);
 
         last_action = output[output.length-1]+input;
+        
         if ((verif_oper == Infinity) || (verif_oper == -Infinity)) {
             document.getElementById('output_field').value = infinity_str;
         } else {
