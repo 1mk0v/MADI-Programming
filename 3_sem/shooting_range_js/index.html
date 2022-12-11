@@ -1,15 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shooting range</title>
-    <link rel="stylesheet" type="text/css" href="index.css">
+    <link rel="stylesheet" type="text/css" href="css/index.css">
     <script src="index.js"></script>
 </head>
+
 <body>
-    <h1 align="center">Shooting range</h1>
     <div id="life">
         <ul>
             <li><img src="photo/heart.png" width="15%" id="heart1"></li>
@@ -17,20 +18,48 @@
             <li><img src="photo/heart.png" width="15%" id="heart3"></li>
         </ul>
     </div>
-    <div id="field">
-        <button id="rabbit"></button>
+
+    <div id="shots">
+        <table>
+            <tr>
+                <td>SHOTS</td>
+                <td id="shotNum"></td>
+            </tr>
+        </table>
     </div>
 
-    <div>
-        <button id="start">Start</button>
+    <div id="field">
+        <div id="rabbit"><img src="photo/rabbit.gif" id="rabbitIMG"></div>
     </div>
+
     <div id="information">
         <table>
-            <tr><td>WINDOW HEIGHT</td><td id="winH"></td></tr>
-            <tr><td>WINDOW WIDTH</td><td id="winW"></td></tr>
-            <tr><td>RABBIT PosX</td><td id="positionX"></td></tr>
-            <tr><td>RABBIT PosY</td><td id="positionY"></td></tr>
+            <tr>
+                <td>WINDOW HEIGHT</td>
+                <td id="winH"></td>
+            </tr>
+            <tr>
+                <td>WINDOW WIDTH</td>
+                <td id="winW"></td>
+            </tr>
+            <tr>
+                <td>MOUSE PosX</td>
+                <td id="mousePositionX"></td>
+            </tr>
+            <tr>
+                <td>MOUSE PosY</td>
+                <td id="mousePositionY"></td>
+            </tr>
+            <tr>
+                <td>RABBIT PosX</td>
+                <td id="rabbitPositionX"></td>
+            </tr>
+            <tr>
+                <td>RABBIT PosY</td>
+                <td id="rabbitPositionY"></td>
+            </tr>
         </table>
     </div>
 </body>
+
 </html>
