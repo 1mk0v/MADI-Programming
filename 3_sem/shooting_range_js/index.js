@@ -128,7 +128,7 @@ function GameStart() {
         GameStop();
         return;
     }
-    // BugsBunny.run();
+    BugsBunny.run();
 }
 
 function GameStop() {
@@ -233,7 +233,7 @@ function shots() {
 
 //Вычисление позиции курсора
 function mousePosition(event) {
-    let aim = document.getElementById('aim');
+    // let aim = document.getElementById('aim');
     let aimPosX = document.getElementById('aimPositionX');
     let aimPosY = document.getElementById('aimPositionY');
     let positionX = document.getElementById('mousePositionX');
@@ -242,10 +242,10 @@ function mousePosition(event) {
     positionY.innerHTML = event.offsetY;
     lastAimPositionX = event.offsetX-40;
     lastAimPositionY = event.offsetY-40;
-    aimPosX.innerHTML = lastAimPositionX;
-    aimPosY.innerHTML = lastAimPositionY;
-    aim.style.left = `${lastAimPositionX}px`;
-    aim.style.top = `${lastAimPositionY}px`;
+    // aimPosX.innerHTML = lastAimPositionX;
+    // aimPosY.innerHTML = lastAimPositionY;
+    // aim.style.left = `${lastAimPositionX}px`;
+    // aim.style.top = `${lastAimPositionY}px`;
 }
 
 //Вычисление размера окна
