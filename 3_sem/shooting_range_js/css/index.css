@@ -10,6 +10,7 @@ body {
     height: 70vh;
     width: 70vw;
     background-color: white;
+    cursor: crosshair;
 }
 
 ul {
@@ -37,6 +38,7 @@ ul {
     width: 80px;
     box-shadow: none;
     border: 0px;
+    z-index: 0;
 }
 
 #rabbit img {
@@ -55,6 +57,21 @@ ul {
     margin: 30px auto;
     border-collapse: separate;
     border-spacing: 30px 0px;
+}
+
+#aim {
+    position: relative;
+    height: 80px;
+    width: 80px;
+    box-shadow: none;
+    border: 0px;
+
+}
+
+#aim img {
+    height: 80px;
+    width: 80px;
+    z-index: 2;
 }
 
 @font-face {
