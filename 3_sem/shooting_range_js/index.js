@@ -25,11 +25,13 @@
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+//ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ
+let lastAimPositionX = 0;
+let lastAimPositionY = 0;
 let lastRabbitPositionX = 0;
 let lastRabbitPositionY = 0;
 let lifeOfRabbit = 3;
-let shot = 0
+let shot = 0;
 
 let run;
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -71,6 +73,7 @@ class Rabbit {
 
         for (let i = 0; i<10; i++) {
 
+            //Передвижение
             setTimeout(() => {
 
                 newRabbitPositionX = lastRabbitPositionX + newPathX;
@@ -100,9 +103,7 @@ class Rabbit {
                 document.getElementById('rabbitPositionY').innerHTML = lastRabbitPositionY;
             }, time);
             time += 50;
-        }
-
-        
+        }        
     }
 
     //ОН УМЕЕТ УМИРАТЬ
@@ -122,10 +123,6 @@ let BugsBunny = new Rabbit();
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //GAME
 
-function main() {
-    GameStart();
-}
-
 function GameStart() {
     if (BugsBunny.isDead()) {
         GameStop();
@@ -142,26 +139,102 @@ function GameStop() {
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+//НОВЫЙ ПУТЬ
 function getRandomInt() {
     let nextPos = [-5, 0, 5];
     return nextPos[Math.floor(Math.random() * 3)];
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//УПРАВЛЕНИЕ КЛАВИАТУРОЙ
 
+function keyboardClick(event) {
+
+    switch (event.keyCode) {
+        case 87:
+            aimUP();
+            break;
+        case 65:
+            aimLEFT();
+            break;
+        case 68:
+            aimRIGHT();
+            break;
+        case 83:
+            aimDOWN();
+            break;
+        case 32:
+            console.log(aimHIT());
+            shots();
+            break;
+        default:
+            break;
+    }
+}
+
+function aimUP() {
+    if (lastAimPositionY - 8 > 0) {
+        lastAimPositionY = lastAimPositionY - 8;
+        document.getElementById('aim').style.top = `${lastAimPositionY}px`;
+        document.getElementById('mousePositionY').innerHTML = lastAimPositionY;
+    }
+}
+
+function aimLEFT() {
+    if (lastAimPositionX - 8 > 0) {
+        lastAimPositionX = lastAimPositionX - 8;
+        document.getElementById('aim').style.left = `${lastAimPositionX}px`;
+        document.getElementById('mousePositionX').innerHTML = lastAimPositionX;
+    }
+}
+
+function aimRIGHT() {
+    if (lastAimPositionX + 8 < fieldSize()[1]-80) {
+        lastAimPositionX = lastAimPositionX + 8;
+        document.getElementById('aim').style.left = `${lastAimPositionX}px`;
+        document.getElementById('mousePositionX').innerHTML = lastAimPositionX;
+    }
+}
+
+function aimDOWN() {
+    if (lastAimPositionY + 8 < fieldSize()[0]-80) {
+        lastAimPositionY = lastAimPositionY + 8;
+        document.getElementById('aim').style.top = `${lastAimPositionY}px`;
+        document.getElementById('mousePositionY').innerHTML = lastAimPositionY;
+    }
+}
+
+function aimHIT() {
+    //Расстояние между точками. (высчитывал по формуле длины вектора между двумя точками )
+    let distansBetweenPoints = Math.sqrt(Math.pow((lastRabbitPositionX-lastAimPositionX), 2) + Math.pow((lastRabbitPositionY-lastAimPositionY),2));
+    if (distansBetweenPoints > 80 && distansBetweenPoints < 112) {
+        BugsBunny.hit();
+    }
+    return distansBetweenPoints;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//Считает количество выстрелов
 function shots() {
     shot += 1;
     document.getElementById('shotNum').innerHTML = shot;
 }
 
+//Вычисление позиции курсора
 function mousePosition(event) {
+    // let aim = document.getElementById('aim');
     let positionX = document.getElementById('mousePositionX');
     let positionY = document.getElementById('mousePositionY');
     positionX.innerHTML = event.offsetX;
     positionY.innerHTML = event.offsetY;
+    lastAimPositionX = event.offsetX-40;
+    lastAimPositionY = event.offsetY-40;
+    // aim.style.left = `${lastAimPositionX}px`;
+    // aim.style.top = `${lastAimPositionY}px`;
 }
 
+//Вычисление размера окна
 function fieldSize() {
     let height = document.getElementById('field').clientHeight;
     let width = document.getElementById('field').clientWidth;
@@ -171,6 +244,7 @@ function fieldSize() {
     return size;
 }
 
+//Стартовая позиция кролика (при желании можно поменять)
 function startRabbitPos() {
     let height = fieldSize()[0];
     let width = fieldSize()[1];
@@ -181,20 +255,28 @@ function startRabbitPos() {
     rabbit.style.top = `${lastRabbitPositionY}px`;
 }
 
+//Стартовая позиция прицела
+function startAimPos() {
+    let aim = document.getElementById('aim');
+    aim.style.left = '100px';
+    aim.style.top = '100px';
+}
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function eventsListeners() {
+    startAimPos();
     startRabbitPos();
     fieldSize();
     window.addEventListener('resize', fieldSize);
     document.getElementById('field').addEventListener("mousemove", mousePosition);
     document.getElementById('field').addEventListener("click", shots);
     document.getElementById('rabbit').addEventListener('click', BugsBunny.hit);
-    // document.getElementById('start').addEventListener('click', main);
+    document.addEventListener('keydown', keyboardClick);
 }
 
 document.addEventListener('DOMContentLoaded', eventsListeners);
-document.addEventListener('DOMContentLoaded', run = setInterval(main, 500));
+document.addEventListener('DOMContentLoaded', run = setInterval(GameStart, 500));
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
