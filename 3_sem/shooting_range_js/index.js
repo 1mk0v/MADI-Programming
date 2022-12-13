@@ -128,7 +128,7 @@ function GameStart() {
         GameStop();
         return;
     }
-    BugsBunny.run();
+    // BugsBunny.run();
 }
 
 function GameStop() {
@@ -206,13 +206,23 @@ function aimDOWN() {
 
 function aimHIT() {
     //Расстояние между точками. (высчитывал по формуле длины вектора между двумя точками )
-    let distansBetweenPoints = Math.sqrt(Math.pow((lastRabbitPositionX-lastAimPositionX), 2) + Math.pow((lastRabbitPositionY-lastAimPositionY),2));
-    if (distansBetweenPoints > 80 && distansBetweenPoints < 112) {
+    if (isReadyToHit()) {
         BugsBunny.hit();
     }
-    return distansBetweenPoints;
 }
 
+function isReadyToHit() {
+    let pi = 3.1415926535;
+    let distansBetweenPoints = Math.sqrt(Math.pow((lastRabbitPositionX-lastAimPositionX), 2) + Math.pow((lastRabbitPositionY-lastAimPositionY),2));
+    if (distansBetweenPoints > 81 && distansBetweenPoints < 112){
+        let cos = ((lastAimPositionX-lastRabbitPositionX)/distansBetweenPoints);
+        let angleRadians = Math.acos(cos);
+        let angleDegrees = (angleRadians*180)/pi;
+        if (angleDegrees > 0 && angleDegrees < 22) {
+            return true
+        }
+    }
+}
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //Считает количество выстрелов
@@ -223,15 +233,19 @@ function shots() {
 
 //Вычисление позиции курсора
 function mousePosition(event) {
-    // let aim = document.getElementById('aim');
+    let aim = document.getElementById('aim');
+    let aimPosX = document.getElementById('aimPositionX');
+    let aimPosY = document.getElementById('aimPositionY');
     let positionX = document.getElementById('mousePositionX');
     let positionY = document.getElementById('mousePositionY');
     positionX.innerHTML = event.offsetX;
     positionY.innerHTML = event.offsetY;
     lastAimPositionX = event.offsetX-40;
     lastAimPositionY = event.offsetY-40;
-    // aim.style.left = `${lastAimPositionX}px`;
-    // aim.style.top = `${lastAimPositionY}px`;
+    aimPosX.innerHTML = lastAimPositionX;
+    aimPosY.innerHTML = lastAimPositionY;
+    aim.style.left = `${lastAimPositionX}px`;
+    aim.style.top = `${lastAimPositionY}px`;
 }
 
 //Вычисление размера окна
@@ -253,19 +267,12 @@ function startRabbitPos() {
     let rabbit = document.getElementById('rabbit');
     rabbit.style.left = `${lastRabbitPositionX}px`;
     rabbit.style.top = `${lastRabbitPositionY}px`;
+    document.getElementById('rabbitPositionX').innerHTML = lastRabbitPositionX;
+    document.getElementById('rabbitPositionY').innerHTML = lastRabbitPositionY;
 }
-
-//Стартовая позиция прицела
-function startAimPos() {
-    let aim = document.getElementById('aim');
-    aim.style.left = '100px';
-    aim.style.top = '100px';
-}
-
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function eventsListeners() {
-    startAimPos();
     startRabbitPos();
     fieldSize();
     window.addEventListener('resize', fieldSize);
