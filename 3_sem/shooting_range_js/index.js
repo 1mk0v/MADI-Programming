@@ -237,7 +237,7 @@ function mousePosition(event) {
     let field = document.getElementById('field').getBoundingClientRect()
     let activeAim = field.left <= event.offsetX && event.offsetX <= field.right && field.top <= event.offsetY && event.offsetY <= field.bottom
     if (activeAim) {
-        // document.getElementById('field').style.cursor = 'none';
+        document.getElementById('field').style.cursor = 'none';
         let aimPosX = document.getElementById('aimPositionX');
         let aimPosY = document.getElementById('aimPositionY');
         let positionX = document.getElementById('mousePositionX');

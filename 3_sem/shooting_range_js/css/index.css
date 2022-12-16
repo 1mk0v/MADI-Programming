@@ -39,11 +39,14 @@ ul {
     box-shadow: none;
     border: 0px;
     z-index: 0;
+
 }
 
 #rabbit img {
     height: 80px;
     width: 80px;
+    pointer-events: none;
+
 }
 
 #shots table {
@@ -65,12 +68,15 @@ ul {
     width: 80px;
     box-shadow: none;
     border: 0px;
-
+    pointer-events: none;
+    z-index: 1;
 }
 
 #aim img {
     height: 80px;
     width: 80px;
+    pointer-events: none;
+    z-index: 1;
 }
 
 @font-face {
