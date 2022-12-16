@@ -60,7 +60,7 @@ ul {
 }
 
 #aim {
-    position: relative;
+    position:relative;
     height: 80px;
     width: 80px;
     box-shadow: none;
@@ -71,7 +71,6 @@ ul {
 #aim img {
     height: 80px;
     width: 80px;
-    z-index: 2;
 }
 
 @font-face {

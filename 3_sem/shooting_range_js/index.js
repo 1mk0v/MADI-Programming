@@ -128,7 +128,7 @@ function GameStart() {
         GameStop();
         return;
     }
-    BugsBunny.run();
+    // BugsBunny.run();
 }
 
 function GameStop() {
@@ -205,7 +205,6 @@ function aimDOWN() {
 }
 
 function aimHIT() {
-    //Расстояние между точками. (высчитывал по формуле длины вектора между двумя точками )
     if (isReadyToHit()) {
         BugsBunny.hit();
     }
@@ -213,6 +212,7 @@ function aimHIT() {
 
 function isReadyToHit() {
     let pi = 3.1415926535;
+    //Расстояние между точками. (высчитывал по формуле длины вектора между двумя точками )
     let distansBetweenPoints = Math.sqrt(Math.pow((lastRabbitPositionX-lastAimPositionX), 2) + Math.pow((lastRabbitPositionY-lastAimPositionY),2));
     if (distansBetweenPoints > 81 && distansBetweenPoints < 112){
         let cos = ((lastAimPositionX-lastRabbitPositionX)/distansBetweenPoints);
@@ -234,18 +234,25 @@ function shots() {
 //Вычисление позиции курсора
 function mousePosition(event) {
     // let aim = document.getElementById('aim');
-    let aimPosX = document.getElementById('aimPositionX');
-    let aimPosY = document.getElementById('aimPositionY');
-    let positionX = document.getElementById('mousePositionX');
-    let positionY = document.getElementById('mousePositionY');
-    positionX.innerHTML = event.offsetX;
-    positionY.innerHTML = event.offsetY;
-    lastAimPositionX = event.offsetX-40;
-    lastAimPositionY = event.offsetY-40;
-    // aimPosX.innerHTML = lastAimPositionX;
-    // aimPosY.innerHTML = lastAimPositionY;
-    // aim.style.left = `${lastAimPositionX}px`;
-    // aim.style.top = `${lastAimPositionY}px`;
+    let field = document.getElementById('field').getBoundingClientRect()
+    let activeAim = field.left <= event.offsetX && event.offsetX <= field.right && field.top <= event.offsetY && event.offsetY <= field.bottom
+    if (activeAim) {
+        // document.getElementById('field').style.cursor = 'none';
+        let aimPosX = document.getElementById('aimPositionX');
+        let aimPosY = document.getElementById('aimPositionY');
+        let positionX = document.getElementById('mousePositionX');
+        let positionY = document.getElementById('mousePositionY');
+        positionX.innerHTML = event.offsetX;
+        positionY.innerHTML = event.offsetY;
+        lastAimPositionX = event.offsetX-40;
+        lastAimPositionY = event.offsetY-40;
+        aimPosX.innerHTML = lastAimPositionX;
+        aimPosY.innerHTML = lastAimPositionY;
+        aim.style.left = `${lastAimPositionX}px`;
+        aim.style.top = `${lastAimPositionY}px`;
+    }
+
+
 }
 
 //Вычисление размера окна
@@ -276,7 +283,7 @@ function eventsListeners() {
     startRabbitPos();
     fieldSize();
     window.addEventListener('resize', fieldSize);
-    document.getElementById('field').addEventListener("mousemove", mousePosition);
+    window.addEventListener("mousemove", mousePosition);
     document.getElementById('field').addEventListener("click", shots);
     document.getElementById('rabbit').addEventListener('click', BugsBunny.hit);
     document.addEventListener('keydown', keyboardClick);
