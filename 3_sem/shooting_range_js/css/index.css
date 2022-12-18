@@ -33,7 +33,7 @@ ul {
 }
 
 #rabbit {
-    position: relative;
+    position: absolute;
     height: 80px;
     width: 80px;
     box-shadow: none;

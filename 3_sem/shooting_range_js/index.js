@@ -79,15 +79,15 @@ class Rabbit {
                 newRabbitPositionX = lastRabbitPositionX + newPathX;
                 newRabbitPositionY = lastRabbitPositionY + newPathY;
 
-                if (newRabbitPositionX < 0 || newRabbitPositionX > fieldSize()[1] - 80) {
-                    while (newRabbitPositionX < 0 || newRabbitPositionX > fieldSize()[1] - 80) {
+                if (newRabbitPositionX <= fieldSize()[3] || newRabbitPositionX >= fieldSize()[1] - 80) {
+                    while (newRabbitPositionX < fieldSize()[3] || newRabbitPositionX > fieldSize()[1] - 80) {
                         newPathX = getRandomInt();
                         newRabbitPositionX = lastRabbitPositionX + newPathX;
                     }
                 }
         
-                if (newRabbitPositionY < 0 || newRabbitPositionY > fieldSize()[0] - 80) {
-                    while (newRabbitPositionY < 0 || newRabbitPositionY > fieldSize()[0] - 80) {
+                if (newRabbitPositionY < fieldSize()[2] || newRabbitPositionY > fieldSize()[0] - 80) {
+                    while (newRabbitPositionY < fieldSize()[2] || newRabbitPositionY > fieldSize()[0] - 80) {
                         newPathY = getRandomInt();
                         newRabbitPositionY = lastRabbitPositionY + newPathY;
                     }
@@ -235,7 +235,7 @@ function shots() {
 function mousePosition(event) {
     // let aim = document.getElementById('aim');
     let field = document.getElementById('field').getBoundingClientRect()
-    let activeAim = field.left <= event.offsetX && event.offsetX <= field.right && field.top <= event.offsetY && event.offsetY <= field.bottom
+    let activeAim = 0 <= event.offsetX && event.offsetX <= field.width && 0 <= event.offsetY && event.offsetY <= field.height
     if (activeAim) {
         document.getElementById('field').style.cursor = 'none';
         let aimPosX = document.getElementById('aimPositionX');
@@ -259,9 +259,11 @@ function mousePosition(event) {
 function fieldSize() {
     let height = document.getElementById('field').clientHeight;
     let width = document.getElementById('field').clientWidth;
+    let startX = document.getElementById('field').getBoundingClientRect().left;
+    let startY = document.getElementById('field').getBoundingClientRect().top
     document.getElementById('winH').innerHTML = height;
     document.getElementById('winW').innerHTML = width;
-    let size = [height, width];
+    let size = [height, width, startX, startY];
     return size;
 }
 
@@ -272,8 +274,10 @@ function startRabbitPos() {
     lastRabbitPositionX = width/2;
     lastRabbitPositionY = height/2;
     let rabbit = document.getElementById('rabbit');
-    rabbit.style.left = `${lastRabbitPositionX}px`;
-    rabbit.style.top = `${lastRabbitPositionY}px`;
+    // rabbit.style.left = `${lastRabbitPositionX}px`;
+    // rabbit.style.top = `${lastRabbitPositionY}px`;
+    rabbit.style.left = `0px`;
+    rabbit.style.top = `0px`;
     document.getElementById('rabbitPositionX').innerHTML = lastRabbitPositionX;
     document.getElementById('rabbitPositionY').innerHTML = lastRabbitPositionY;
 }
