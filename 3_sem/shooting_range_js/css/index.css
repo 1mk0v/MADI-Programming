@@ -33,20 +33,18 @@ ul {
 }
 
 #rabbit {
-    position: absolute;
-    height: 80px;
-    width: 80px;
-    box-shadow: none;
-    border: 0px;
-    z-index: 0;
-
-}
-
-#rabbit img {
+    position: relative;
     height: 80px;
     width: 80px;
     pointer-events: none;
+    box-shadow: none;
+    border: 0px;
+}
 
+#rabbit img {
+    position: relative;
+    height: 80px;
+    width: 80px;
 }
 
 #shots table {
@@ -63,20 +61,19 @@ ul {
 }
 
 #aim {
-    position:relative;
+    position:absolute;
     height: 80px;
     width: 80px;
+    pointer-events: none;
     box-shadow: none;
     border: 0px;
-    pointer-events: none;
-    z-index: 1;
+    z-index: 2;
 }
 
 #aim img {
+    position:absolute;
     height: 80px;
     width: 80px;
-    pointer-events: none;
-    z-index: 1;
 }
 
 @font-face {
