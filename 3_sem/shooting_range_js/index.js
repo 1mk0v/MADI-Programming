@@ -43,8 +43,8 @@ var run;
 class Rabbit {
 
     //ЕГО МОЖНО ПОДСТРЕЛИТЬ
-    hit() {
-        if (isReadyToHit()){
+    hit(event) {
+        if (isReadyToHit(event)){
             lifeOfRabbit = lifeOfRabbit -1;
             switch (parseInt(lifeOfRabbit)) {
                 case 2:
@@ -113,7 +113,6 @@ class Rabbit {
     //ОН УМЕЕТ УМИРАТЬ
     isDead() {
         if (lifeOfRabbit <= 0) {
-            document.getElementById('heart3').src = `${document.getElementsByTagName('script')[0].src.slice(0,-8)}photo/deadHeart.png`;
             return true;
         } 
     }
@@ -132,7 +131,7 @@ function GameStart() {
         GameStop();
         return;
     }
-    // BugsBunny.run();
+    BugsBunny.run();
 }
 
 function GameStop() {
@@ -152,20 +151,30 @@ function getRandomInt() {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //ГОТОВНОСТЬ К УДАРУ
 
-function isReadyToHit() {
+function isReadyToHit(event) {
+    console.log(event);
     let pi = 3.1415926535;
-    let rabbitSize = document.getElementById('rabbit').getBoundingClientRect();
-    let maxDistans = Math.sqrt(Math.pow(rabbitSize.width,2)*2)/2
-    console.log(maxDistans);
-    //Расстояние между точками. (высчитывал по формуле длины вектора между двумя точками )
-    let distansBetweenPoints = Math.sqrt(Math.pow((lastRabbitPositionX+(rabbitSize.width/2)-mousePositionX), 2) + Math.pow((lastRabbitPositionY+(rabbitSize.height/2)-mousePositionY),2));
-    console.log(distansBetweenPoints);
+    let rabbirOpt = document.getElementById('rabbit').getBoundingClientRect();
+    let aimOpt = document.getElementById('aim').getBoundingClientRect();
+    let maxDistans = Math.sqrt(Math.pow(rabbirOpt.width,2)*2)/2;
+    let distansBetweenPoints = 0;
+    let vectorAim = [(aimOpt.left - rabbirOpt.left), (aimOpt.top - rabbirOpt.top)];
+    let vectorRabbit = [(rabbirOpt.right - rabbirOpt.left), (rabbirOpt.bottom - rabbirOpt.top)];
+    let cos = (vectorRabbit[0]*vectorRabbit[1] + vectorAim[0]*vectorAim[1])/(Math.sqrt(vectorAim[0]*vectorAim[0] + vectorRabbit[0]*vectorRabbit[0]) * Math.sqrt(vectorAim[1]*vectorAim[1] + vectorRabbit[1]*vectorRabbit[1]));
+    if (event) {
+        //Относительно мышки
+        //Расстояние между точками. (высчитывал по формуле длины вектора между двумя точками )
+        distansBetweenPoints = Math.sqrt(Math.pow((lastRabbitPositionX+(rabbirOpt.width/2)-mousePositionX), 2) + Math.pow((lastRabbitPositionY+(rabbirOpt.height/2)-mousePositionY),2));
+    } else {
+        //Относительно картинки
+        let aimPosX = aimOpt.left - fieldSize()[2];
+        let aimPosY = aimOpt.top - fieldSize()[3];
+        distansBetweenPoints = Math.sqrt(Math.pow((lastRabbitPositionX+(rabbirOpt.width/2)-aimPosX-(aimOpt.width/2)), 2) + Math.pow((lastRabbitPositionY+(rabbirOpt.height/2)-aimPosY-(aimOpt.height/2)),2)); 
+    }
+
     if (distansBetweenPoints > 0 && distansBetweenPoints < maxDistans){
-        //Неверный арккосинус
-        let cos = ((mousePositionX-lastRabbitPositionX)/distansBetweenPoints);
         let angleRadians = Math.acos(cos);
         let angleDegrees = (angleRadians*180)/pi;
-        console.log(cos);
         if (angleDegrees > 0 && angleDegrees < 90) {
             return true
         }
@@ -174,7 +183,7 @@ function isReadyToHit() {
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //УПРАВЛЕНИЕ КЛАВИАТУРОЙ
-
+//Ошибки
 function keyboardClick(event) {
 
     switch (event.keyCode) {
@@ -203,7 +212,7 @@ function aimUP() {
     if (lastAimPositionY - 8 > 0) {
         lastAimPositionY = lastAimPositionY - 8;
         document.getElementById('aim').style.top = `${lastAimPositionY}px`;
-        document.getElementById('mousePositionY').innerHTML = lastAimPositionY;
+        document.getElementById('aimPositionY').innerHTML =lastAimPositionY;
     }
 }
 
@@ -211,7 +220,7 @@ function aimLEFT() {
     if (lastAimPositionX - 8 > 0) {
         lastAimPositionX = lastAimPositionX - 8;
         document.getElementById('aim').style.left = `${lastAimPositionX}px`;
-        document.getElementById('mousePositionX').innerHTML = lastAimPositionX;
+        document.getElementById('aimPositionX').innerHTML =lastAimPositionX;
     }
 }
 
@@ -219,7 +228,7 @@ function aimRIGHT() {
     if (lastAimPositionX + 8 < fieldSize()[1]-80) {
         lastAimPositionX = lastAimPositionX + 8;
         document.getElementById('aim').style.left = `${lastAimPositionX}px`;
-        document.getElementById('mousePositionX').innerHTML = lastAimPositionX;
+        document.getElementById('aimPositionX').innerHTML = lastAimPositionX;
     }
 }
 
@@ -227,7 +236,7 @@ function aimDOWN() {
     if (lastAimPositionY + 8 < fieldSize()[0]-80) {
         lastAimPositionY = lastAimPositionY + 8;
         document.getElementById('aim').style.top = `${lastAimPositionY}px`;
-        document.getElementById('mousePositionY').innerHTML = lastAimPositionY;
+        document.getElementById('aimPositionY').innerHTML =lastAimPositionY;
     }
 }
 
@@ -245,7 +254,7 @@ function shots() {
 
 //Вычисление позиции курсора
 function mousePosition(event) {
-    let aimSizeOpt = document.getElementById('aim').getBoundingClientRect()
+    let aimOpt = document.getElementById('aim').getBoundingClientRect()
     let aim = document.getElementById('aim');
     let field = document.getElementById('field').getBoundingClientRect();
 
@@ -255,16 +264,16 @@ function mousePosition(event) {
         document.getElementById('field').style.cursor = 'none';
         let aimPosX = document.getElementById('aimPositionX');
         let aimPosY = document.getElementById('aimPositionY');
-        let positionX = document.getElementById('mousePositionX');
-        let positionY = document.getElementById('mousePositionY');
+        // let positionX = document.getElementById('mousePositionX');
+        // let positionY = document.getElementById('mousePositionY');
         mousePositionX = event.offsetX;
         mousePositionY = event.offsetY;
-        positionX.innerHTML = mousePositionX;
-        positionY.innerHTML = mousePositionY;
-        lastAimPositionX = mousePositionX+field.left-aimSizeOpt.width/2;
-        lastAimPositionY = mousePositionY+field.top-aimSizeOpt.height/2;
-        aimPosX.innerHTML = lastAimPositionX;
-        aimPosY.innerHTML = lastAimPositionY;
+        // positionX.innerHTML = mousePositionX;
+        // positionY.innerHTML = mousePositionY;
+        lastAimPositionX = mousePositionX+field.left-aimOpt.width/2;
+        lastAimPositionY = mousePositionY+field.top-aimOpt.height/2;
+        aimPosX.innerHTML = lastAimPositionX-field.left;
+        aimPosY.innerHTML = lastAimPositionY-field.top;
         aim.style.left = `${lastAimPositionX}px`;
         aim.style.top = `${lastAimPositionY}px`;
     }
@@ -276,8 +285,6 @@ function fieldSize() {
     let width = document.getElementById('field').getBoundingClientRect().width;
     let startX = document.getElementById('field').getBoundingClientRect().left;
     let startY = document.getElementById('field').getBoundingClientRect().top;
-    // document.getElementById('winH').innerHTML = height;
-    // document.getElementById('winW').innerHTML = width;
     let size = [height, width, startX, startY];
     return size;
 }
@@ -299,7 +306,6 @@ function startRabbitPos() {
 
 function eventsListeners() {
     startRabbitPos();
-    fieldSize();
     window.addEventListener('resize', location.reload);
     //Обработка события ОБЯЗАТЕЛЬНО ВНУТРИ ПОЛЯ, иначе будет отсчитывать от другого
     document.getElementById('field').addEventListener("mousemove", mousePosition);
