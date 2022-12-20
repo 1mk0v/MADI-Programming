@@ -247,8 +247,11 @@ function aimHIT() {
 
 //Считает количество выстрелов
 function shots() {
-    shot += 1;
-    document.getElementById('shotNum').innerHTML = shot;
+    if (!BugsBunny.isDead()){
+        shot += 1;
+        document.getElementById('shotNum').innerHTML = shot;
+    }
+    
 }
 
 //Вычисление позиции курсора
