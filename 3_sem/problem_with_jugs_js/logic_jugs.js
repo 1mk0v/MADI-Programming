@@ -102,6 +102,15 @@ function Starting() {
 }
 
 function Gap() {
+    if (litersOfFirstJug == maxLitersOfFirstJug) {
+        litersOfFirstJug = 0;
+        if (litersOfSecondJug == 0) {
+            alert(impossible);
+            clearInterval(run);
+            return;
+        }
+    }
+    
     litersOfSecondJug = litersOfSecondJug+maxLitersOfSecondJug;
     printWater(divOfWaterInFirstJug, divOfWaterInSecondJug, litersOfFirstJug,litersOfSecondJug, oneLiterInProcentFirst, oneLiterInProcentSecond);
     printInJugs(divOfWaterInFirstJug, divOfWaterInSecondJug, litersOfFirstJug, litersOfSecondJug);
