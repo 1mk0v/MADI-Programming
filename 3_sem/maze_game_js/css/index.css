@@ -1,0 +1,37 @@
+body {
+    color: white;
+    background-color: black;
+    size: 100%;
+}
+
+#logo {
+    margin-top: 2%;
+    margin-bottom: 5%;
+    text-align: center;
+    justify-content: center;
+    font-size: 26px;
+    font-family: 'Pixel';
+}
+
+#maze {
+    margin: 0 auto;
+    display: grid;
+    /* grid-template-columns: repeat(10, 20px); */
+    grid: 10px;
+    height: 70vh;
+    width: 70vw;
+    cursor: crosshair;
+}
+
+.true {
+    background-color: #FFFFFF00;
+}
+
+.false {
+    background-color: #FFFFFF;
+}
+
+@font-face {
+    font-family: 'Pixel';
+    src: url('PressStart2P-Regular.ttf');
+}
