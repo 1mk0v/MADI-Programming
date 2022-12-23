@@ -50,11 +50,11 @@ let brick = new Block();
 
 
 //Возмем рандомную точку для в области
-function getRandomInt() {
-    let width = document.getElementById('maze').getBoundingClientRect().width;
-    let height = document.getElementById('maze').getBoundingClientRect().height;
-    let positionX = Math.floor(Math.random() * parseInt(width/20));
-    let positionY = Math.floor(Math.random() * parseInt(height/20));
+function getRandomDot() {
+    // let width = document.getElementById('maze').getBoundingClientRect().width;
+    // let height = document.getElementById('maze').getBoundingClientRect().height;
+    let positionX = Math.floor(Math.random() * mazeOpt[0]);
+    let positionY = Math.floor(Math.random() * mazeOpt[1]);
     return [positionX, positionY];
 }
 
@@ -63,19 +63,32 @@ function getRandomInt() {
 function mazeSize() {
     let width = document.getElementById('maze').getBoundingClientRect().width;
     let height = document.getElementById('maze').getBoundingClientRect().height;
-    return [width, height]
+    let widthInBlocks = parseInt(width/20);
+    let heightInBlocks = parseInt(height/20);
+    if (widthInBlocks < 5 || heightInBlocks < 5) {
+        return alert('Sorry your display is so little(')
+    }
+
+    if (widthInBlocks%2 == 0 && heightInBlocks%2 == 0) {
+        widthInBlocks = widthInBlocks - 1;
+        heightInBlocks = heightInBlocks - 1;
+    }
+    
+    return [widthInBlocks, heightInBlocks]
 }
 
 
-//Сделаем матрицу лабиринта
+//Сделаем матрицу поля лабиринта
 function createMatrixOfMaze() {
     let matrix = new Array();
-    for (let i =0; i<parseInt(mazeOpt[1]/20); i++) {
+    for (let i =0; i<mazeOpt[1]; i++) {
         matrix[i] = new Array();
-        for (let j=0; j<parseInt(mazeOpt[0]/20); j++) {
-            if ((i == 0 || i == parseInt(mazeOpt[1]/20)-1) && (j >= 0 || j <= parseInt(mazeOpt[0]/20)-1)) {
+        for (let j=0; j<mazeOpt[0]; j++) {
+            if ((i == 0 || i == mazeOpt[1]-1) && (j >= 0 || j <= mazeOpt[0]-1)) {
                 matrix[i][j] = 1;
-            } else if (((i > 0 && i < parseInt(mazeOpt[1]/20-1)) && (j == 0 || j == parseInt(mazeOpt[0]/20)-1))) {
+            } else if ((i > 0 && i < mazeOpt[1]-1) && (j == 0 || j == mazeOpt[0]-1)) {
+                matrix[i][j] = 1;
+            } else if (i%2 == 0 || j%2 ==0) {
                 matrix[i][j] = 1;
             }
         }
@@ -84,30 +97,35 @@ function createMatrixOfMaze() {
 }
 
 //Нарисуем стены в матрицу
-function createNewWallInMatrix() {
-    let positionOfWalls = getRandomInt();
-    while (positionOfWalls[0] <= 4 || positionOfWalls[0] >= parseInt(mazeOpt[0]/20)-4 || positionOfWalls[1] <= 4 || positionOfWalls[1] >= parseInt(mazeOpt[1]/20) - 4) {
-        positionOfWalls = getRandomInt();
-    }
+// function createNewWallInMatrix() {
+//     let positionOfWalls = getRandomDot();
+//     while (positionOfWalls[0] <= 4 || positionOfWalls[0] >= mazeOpt[0]-4 || positionOfWalls[1] <= 4 || positionOfWalls[1] >= mazeOpt[1] - 4) {
+//         positionOfWalls = getRandomDot();
+//     }
 
-    for (let i = 0; i < parseInt(mazeOpt[1]/20); i++) {
-        matrix[i][positionOfWalls[0]] = 1;
-    }
+//     for (let i = 0; i < mazeOpt[1]; i++) {
+//         matrix[i][positionOfWalls[0]] = 1;
+//     }
 
-    for (let i = 0; i < parseInt(mazeOpt[0]/20); i++) {
-        matrix[positionOfWalls[1]][i] = 1;
-    }
+//     for (let i = 0; i < mazeOpt[0]; i++) {
+//         matrix[positionOfWalls[1]][i] = 1;
+//     }
+// }
 
+
+
+function createWay() {
+        
 }
 
 //Нарисуем сам лабиринт
 function printMaze() {
     
-    document.getElementById('maze').style.gridTemplateColumns = `repeat(${parseInt(mazeOpt[0]/20)},20px)`;
-    document.getElementById('maze').style.gridTemplateRows = `repeat(${parseInt(mazeOpt[1]/20)},20px)`;
+    document.getElementById('maze').style.gridTemplateColumns = `repeat(${mazeOpt[0]},20px)`;
+    document.getElementById('maze').style.gridTemplateRows = `repeat(${mazeOpt[1]},20px)`;
 
-    for (let i =0; i<parseInt(mazeOpt[1]/20); i++) {
-        for (let j=0; j<parseInt(mazeOpt[0]/20); j++) {
+    for (let i =0; i<mazeOpt[1]; i++) {
+        for (let j=0; j<mazeOpt[0]; j++) {
             if (matrix[i][j] == 1) {
                 brick.createBlock('false');
             } else {
@@ -136,7 +154,7 @@ function startGame() {
 function readyToStart() {
     mazeOpt = mazeSize();
     matrix = createMatrixOfMaze();
-    createNewWallInMatrix();
+    // createNewWallInMatrix();
     startGame();
 }
 
