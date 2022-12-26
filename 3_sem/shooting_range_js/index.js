@@ -138,6 +138,28 @@ function GameStop() {
     document.getElementById('field').removeEventListener("click", shots);
     document.getElementById('rabbitIMG').src = `${document.getElementsByTagName('script')[0].src.slice(0,-8)}photo/ghost.gif`;
     document.getElementById('life').innerHTML = 'GAME OVER!';
+    getRestart();
+}
+
+function getRestart() {
+    let resDiv = document.createElement('div');
+    resDiv.id = 'restart';
+    resDiv.style.marginTop = '5vh';
+    resDiv.style.textAlign = 'center';
+    resDiv.style.fontSize = '20px';
+    resDiv.style.color = 'red';
+    let resDivText = document.createElement('p');
+    resDivText.innerHTML = 'Restart Game!' 
+    resDivText.style.cursor = 'pointer';
+    resDivText.id = 'restartText';
+
+    document.body.appendChild(resDiv);
+    document.getElementById('restart').appendChild(resDivText);
+    document.getElementById('restartText').addEventListener('click', restart);
+}
+
+function restart() {
+    location.reload();
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
