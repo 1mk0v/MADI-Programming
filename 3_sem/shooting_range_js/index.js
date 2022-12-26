@@ -26,16 +26,16 @@
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ
-var mousePositionX=0;
-var mousePositionY=0;
-var lastAimPositionX = 0;
-var lastAimPositionY = 0;
-var lastRabbitPositionX = 0;
-var lastRabbitPositionY = 0;
-var lifeOfRabbit = 3;
-var shot = 0;
+let mousePositionX=0;
+let mousePositionY=0;
+let lastAimPositionX = 0;
+let lastAimPositionY = 0;
+let lastRabbitPositionX = 0;
+let lastRabbitPositionY = 0;
+let lifeOfRabbit = 3;
+let shot = 0;
 
-var run;
+let run;
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //ЭКЗЕМПЛЯР ПЕРСОНАЖА И ЕГО ФУНКЦИИ(ВОЗМОЖНОСТИ) 
 //МОЖНО ЗАПИСАТЬ ДАННЫЕ ФУНКЦИИ ОТДЕЛЬНО
@@ -103,8 +103,8 @@ class Rabbit {
                 lastRabbitPositionX = newRabbitPositionX;
                 lastRabbitPositionY = newRabbitPositionY;
 
-                document.getElementById('rabbitPositionX').innerHTML = lastRabbitPositionX;
-                document.getElementById('rabbitPositionY').innerHTML = lastRabbitPositionY;
+                // document.getElementById('rabbitPositionX').innerHTML = lastRabbitPositionX;
+                // document.getElementById('rabbitPositionY').innerHTML = lastRabbitPositionY;
             }, time);
             time += 50;
         }        
@@ -121,24 +121,24 @@ class Rabbit {
 
 //СОЗДАЮ ЭКЗМЕПЛЯР ПЕРСОНАЖА
 
-let BugsBunny = new Rabbit();
+let bugsBunny = new Rabbit();
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //GAME
 
 function GameStart() {
-    if (BugsBunny.isDead()) {
+    if (bugsBunny.isDead()) {
         GameStop();
         return;
     }
-    BugsBunny.run();
+    bugsBunny.run();
 }
 
 function GameStop() {
     clearInterval(run);
     document.getElementById('field').removeEventListener("click", shots);
     document.getElementById('rabbitIMG').src = `${document.getElementsByTagName('script')[0].src.slice(0,-8)}photo/ghost.gif`;
-    document.getElementById('life').innerHTML = 'GAME OVER!';
+    document.getElementById('life').innerHTML = 'GAME OVER!\nPress F5 to restart';
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -150,39 +150,51 @@ function getRandomInt() {
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //ГОТОВНОСТЬ К УДАРУ
+//поменять!
+// function isReadyToHit(event) {
+//     let pi = Math.PI;
+//     let rabbitOpt = document.getElementById('rabbit').getBoundingClientRect();
+//     let aimOpt = document.getElementById('aim').getBoundingClientRect();
+//     let maxDistans = Math.sqrt(Math.pow(rabbitOpt.width,2) + Math.pow(rabbitOpt.height))/2;
+//     let distansBetweenPoints = 0;
+//     let vectorAim = [(aimOpt.left - rabbitOpt.left), (aimOpt.top - rabbitOpt.top)];
+//     let vectorRabbit = [(rabbitOpt.right - rabbitOpt.left), (rabbitOpt.bottom - rabbitOpt.top)];
+//     let cos = (vectorRabbit[0]*vectorRabbit[1] + vectorAim[0]*vectorAim[1])/(Math.sqrt(vectorAim[0]*vectorAim[0] + vectorRabbit[0]*vectorRabbit[0]) * Math.sqrt(vectorAim[1]*vectorAim[1] + vectorRabbit[1]*vectorRabbit[1]));
+//     if (event) {
+//         // Относительно мышки
+//         // Расстояние между точками. (высчитывал по формуле длины вектора между двумя точками )
+//         distansBetweenPoints = Math.sqrt(Math.pow((lastRabbitPositionX+(rabbitOpt.width/2)-mousePositionX), 2) + Math.pow((lastRabbitPositionY+(rabbitOpt.height/2)-mousePositionY),2));
+//     } else {
+//         // Относительно картинки
+//         let aimPosX = aimOpt.left - fieldSize()[2];
+//         let aimPosY = aimOpt.top - fieldSize()[3];
+//         distansBetweenPoints = Math.sqrt(Math.pow((lastRabbitPositionX+(rabbitOpt.width/2)-aimPosX-(aimOpt.width/2)), 2) + Math.pow((lastRabbitPositionY+(rabbitOpt.height/2)-aimPosY-(aimOpt.height/2)),2)); 
+//     }
 
-function isReadyToHit(event) {
-    let pi = 3.1415926535;
-    let rabbirOpt = document.getElementById('rabbit').getBoundingClientRect();
+//     if (distansBetweenPoints > 0 && distansBetweenPoints < maxDistans){
+//         let angleRadians = Math.acos(cos);
+//         let angleDegrees = (angleRadians*180)/pi;
+//         if (angleDegrees > 0 && angleDegrees < 90) {
+//             return true
+//         }
+//     }
+// }
+
+function isReadyToHit() {
+    let rabbitOpt = document.getElementById('rabbit').getBoundingClientRect();
     let aimOpt = document.getElementById('aim').getBoundingClientRect();
-    let maxDistans = Math.sqrt(Math.pow(rabbirOpt.width,2)*2)/2;
-    let distansBetweenPoints = 0;
-    let vectorAim = [(aimOpt.left - rabbirOpt.left), (aimOpt.top - rabbirOpt.top)];
-    let vectorRabbit = [(rabbirOpt.right - rabbirOpt.left), (rabbirOpt.bottom - rabbirOpt.top)];
-    let cos = (vectorRabbit[0]*vectorRabbit[1] + vectorAim[0]*vectorAim[1])/(Math.sqrt(vectorAim[0]*vectorAim[0] + vectorRabbit[0]*vectorRabbit[0]) * Math.sqrt(vectorAim[1]*vectorAim[1] + vectorRabbit[1]*vectorRabbit[1]));
-    if (event) {
-        //Относительно мышки
-        //Расстояние между точками. (высчитывал по формуле длины вектора между двумя точками )
-        distansBetweenPoints = Math.sqrt(Math.pow((lastRabbitPositionX+(rabbirOpt.width/2)-mousePositionX), 2) + Math.pow((lastRabbitPositionY+(rabbirOpt.height/2)-mousePositionY),2));
-    } else {
-        //Относительно картинки
-        let aimPosX = aimOpt.left - fieldSize()[2];
-        let aimPosY = aimOpt.top - fieldSize()[3];
-        distansBetweenPoints = Math.sqrt(Math.pow((lastRabbitPositionX+(rabbirOpt.width/2)-aimPosX-(aimOpt.width/2)), 2) + Math.pow((lastRabbitPositionY+(rabbirOpt.height/2)-aimPosY-(aimOpt.height/2)),2)); 
-    }
-
-    if (distansBetweenPoints > 0 && distansBetweenPoints < maxDistans){
-        let angleRadians = Math.acos(cos);
-        let angleDegrees = (angleRadians*180)/pi;
-        if (angleDegrees > 0 && angleDegrees < 90) {
-            return true
+    
+    if (aimOpt.left > rabbitOpt.left - rabbitOpt.width/2 &&
+        aimOpt.right < rabbitOpt.right + rabbitOpt.width/2&&
+        aimOpt.top > rabbitOpt.top - rabbitOpt.height/2&&
+        aimOpt.bottom < rabbitOpt.bottom + rabbitOpt.height/2) {
+            return true;
         }
-    }
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //УПРАВЛЕНИЕ КЛАВИАТУРОЙ
-//Ошибки
+
 function keyboardClick(event) {
 
     switch (event.keyCode) {
@@ -210,7 +222,7 @@ function aimUP() {
     if (lastAimPositionY - 8 > fieldSize()[3]) {
         lastAimPositionY = lastAimPositionY - 8;
         document.getElementById('aim').style.top = `${lastAimPositionY}px`;
-        document.getElementById('aimPositionY').innerHTML =lastAimPositionY;
+        // document.getElementById('aimPositionY').innerHTML =lastAimPositionY;
     }
 }
 
@@ -218,7 +230,7 @@ function aimLEFT() {
     if (lastAimPositionX - 8 > fieldSize()[2]) {
         lastAimPositionX = lastAimPositionX - 8;
         document.getElementById('aim').style.left = `${lastAimPositionX}px`;
-        document.getElementById('aimPositionX').innerHTML =lastAimPositionX;
+        // document.getElementById('aimPositionX').innerHTML =lastAimPositionX;
     }
 }
 
@@ -226,7 +238,7 @@ function aimRIGHT() {
     if (lastAimPositionX + 8 < fieldSize()[2]+fieldSize()[1]-80) {
         lastAimPositionX = lastAimPositionX + 8;
         document.getElementById('aim').style.left = `${lastAimPositionX}px`;
-        document.getElementById('aimPositionX').innerHTML = lastAimPositionX;
+        // document.getElementById('aimPositionX').innerHTML = lastAimPositionX;
     }
 }
 
@@ -234,20 +246,20 @@ function aimDOWN() {
     if (lastAimPositionY + 8 < fieldSize()[3]+fieldSize()[0]-80) {
         lastAimPositionY = lastAimPositionY + 8;
         document.getElementById('aim').style.top = `${lastAimPositionY}px`;
-        document.getElementById('aimPositionY').innerHTML =lastAimPositionY;
+        // document.getElementById('aimPositionY').innerHTML =lastAimPositionY;
     }
 }
 
 function aimHIT() {
     shots();
-    BugsBunny.hit();
+    bugsBunny.hit();
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //Считает количество выстрелов
 function shots() {
-    if (!BugsBunny.isDead()){
+    if (!bugsBunny.isDead()){
         shot += 1;
         document.getElementById('shotNum').innerHTML = shot;
     }
@@ -259,8 +271,8 @@ function shots() {
 function mousePosition(event) {
     let aimOpt = document.getElementById('aim').getBoundingClientRect()
     let aim = document.getElementById('aim');
-    let aimPosX = document.getElementById('aimPositionX');
-    let aimPosY = document.getElementById('aimPositionY');
+    // let aimPosX = document.getElementById('aimPositionX');
+    // let aimPosY = document.getElementById('aimPositionY');
     //Поле срабатывания прицела
     let activeAim = 0 <= event.offsetX && event.offsetX <= fieldSize()[1] && 0 <= event.offsetY && event.offsetY <= fieldSize()[0];
     if (activeAim) {
@@ -269,8 +281,8 @@ function mousePosition(event) {
         mousePositionY = event.offsetY;
         lastAimPositionX = mousePositionX+fieldSize()[2]-aimOpt.width/2;
         lastAimPositionY = mousePositionY+fieldSize()[3]-aimOpt.height/2;
-        aimPosX.innerHTML = lastAimPositionX-fieldSize()[2];
-        aimPosY.innerHTML = lastAimPositionY-fieldSize()[3];
+        // aimPosX.innerHTML = lastAimPositionX-fieldSize()[2];
+        // aimPosY.innerHTML = lastAimPositionY-fieldSize()[3];
         aim.style.left = `${lastAimPositionX}px`;
         aim.style.top = `${lastAimPositionY}px`;
     }
@@ -295,8 +307,8 @@ function startRabbitPos() {
     let rabbit = document.getElementById('rabbit');
     rabbit.style.left = `${lastRabbitPositionX}px`;
     rabbit.style.top = `${lastRabbitPositionY}px`;
-    document.getElementById('rabbitPositionX').innerHTML = lastRabbitPositionX;
-    document.getElementById('rabbitPositionY').innerHTML = lastRabbitPositionY;
+    // document.getElementById('rabbitPositionX').innerHTML = lastRabbitPositionX;
+    // document.getElementById('rabbitPositionY').innerHTML = lastRabbitPositionY;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -309,13 +321,13 @@ function eventsListeners() {
     document.getElementById('field').addEventListener("mousemove", mousePosition);
     //Следим за кликом мышки
     document.getElementById('field').addEventListener("click", shots);
-    document.getElementById('field').addEventListener('click', BugsBunny.hit);
+    document.getElementById('field').addEventListener('click', bugsBunny.hit);
     //Следим за вводом с клавиатуры
     document.addEventListener('keydown', keyboardClick);
+    run = setInterval(GameStart, 500);
 }
 
 document.addEventListener('DOMContentLoaded', eventsListeners);
-document.addEventListener('DOMContentLoaded', run = setInterval(GameStart, 500));
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
