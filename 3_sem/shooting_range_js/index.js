@@ -14,7 +14,7 @@
 //       .D#L    ###K:   E#t     G##i,,G##,  E#tiW#G.      E#t        G##i,,G##,   .D#j       E###f         //
 //      :K#t     ##D.    E#t   :K#K:   L##,  E#K##i        E#t      :K#K:   L##,  ,WK,        E#K,          //
 //      ...      #G      ..   ;##D.    L##,  E##D.         E#t     ;##D.    L##,  EG.         EL            //
-//               j            ,,,      .,,   E#t           ,;.     ,,,      .,,   ,           :             //
+//               j            ,,,     .,,   E#t           ,;.     ,,,      .,,   ,           :             //
 //                                           L:                                                             //
 //                                                                                                          //
 //                                                                                                          //
@@ -29,12 +29,9 @@
 let mousePositionX=0;
 let mousePositionY=0;
 let lastAimPositionX = 0;
-let lastAimPositionY = 0;
-let lastRabbitPositionX = 0;
-let lastRabbitPositionY = 0;
 let lifeOfRabbit = 3;
+let lastAimPositionY = 0;
 let shot = 0;
-
 let run;
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -43,10 +40,16 @@ let run;
 
 class Rabbit {
 
+    constructor() {
+        this.lastRabbitPositionX = 0;
+        this.lastRabbitPositionY = 0;
+    }
+
     //ЕГО МОЖНО ПОДСТРЕЛИТЬ
     hit() {
-        if (isReadyToHit()){
-            lifeOfRabbit = lifeOfRabbit -1;
+        shots();
+        if (isReadyToHit()) {
+            lifeOfRabbit = lifeOfRabbit - 1;
             switch (parseInt(lifeOfRabbit)) {
                 case 2:
                     document.getElementById('heart3').src = `${document.getElementsByTagName('script')[0].src.slice(0,-8)}photo/deadHeart.png`;
@@ -72,8 +75,8 @@ class Rabbit {
         let newPathX = getRandomInt();
         let newPathY = getRandomInt();
         //Следующая позиция
-        let newRabbitPositionX = lastRabbitPositionX + newPathX;
-        let newRabbitPositionY = lastRabbitPositionY + newPathY;
+        let newRabbitPositionX = this.lastRabbitPositionX + newPathX;
+        let newRabbitPositionY = this.lastRabbitPositionY + newPathY;
         let time = 0;
 
         for (let i = 0; i<10; i++) {
@@ -81,29 +84,28 @@ class Rabbit {
             //Передвижение
             setTimeout(() => {
 
-                newRabbitPositionX = lastRabbitPositionX + newPathX;
-                newRabbitPositionY = lastRabbitPositionY + newPathY;
+                newRabbitPositionX = this.lastRabbitPositionX + newPathX;
+                newRabbitPositionY = this.lastRabbitPositionY + newPathY;
 
                 if (newRabbitPositionX <= 0 || newRabbitPositionX >= fieldSize()[1] - 80) {
                     while (newRabbitPositionX < 0 || newRabbitPositionX > fieldSize()[1] - 80) {
                         newPathX = getRandomInt();
-                        newRabbitPositionX = lastRabbitPositionX + newPathX;
+                        newRabbitPositionX = this.lastRabbitPositionX + newPathX;
                     }
                 }
         
                 if (newRabbitPositionY < 0 || newRabbitPositionY > fieldSize()[2] - 80) {
                     while (newRabbitPositionY < 0 || newRabbitPositionY > fieldSize()[2] - 80) {
                         newPathY = getRandomInt();
-                        newRabbitPositionY = lastRabbitPositionY + newPathY;
+                        newRabbitPositionY = this.lastRabbitPositionY + newPathY;
                     }
                 }
 
                 rabbit.style.left = `${newRabbitPositionX}px`;
                 rabbit.style.top = `${newRabbitPositionY}px`;
 
-                lastRabbitPositionX = newRabbitPositionX;
-                lastRabbitPositionY = newRabbitPositionY;
-
+                this.lastRabbitPositionX = newRabbitPositionX;
+                this.lastRabbitPositionY = newRabbitPositionY;
             }, time);
             time += 50;
         }        
@@ -119,8 +121,8 @@ class Rabbit {
 
 
 //СОЗДАЮ ЭКЗМЕПЛЯР ПЕРСОНАЖА
-
 let bugsBunny = new Rabbit();
+
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //GAME
@@ -144,7 +146,8 @@ function GameStop() {
 function getRestart() {
     let resDiv = document.createElement('div');
     resDiv.id = 'restart';
-    resDiv.style.marginTop = '5vh';
+    resDiv.style.width = '300px'
+    resDiv.style.margin = '5vh auto';
     resDiv.style.textAlign = 'center';
     resDiv.style.fontSize = '20px';
     resDiv.style.color = 'red';
@@ -182,6 +185,7 @@ function isReadyToHit() {
         aimOpt.bottom < rabbitOpt.bottom + aimOpt.height/2) {
             return true;
         }
+    return false;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -239,7 +243,6 @@ function aimDOWN() {
 }
 
 function aimHIT() {
-    shots();
     bugsBunny.hit();
 }
 
@@ -251,7 +254,6 @@ function shots() {
         shot += 1;
         document.getElementById('shotNum').innerHTML = shot;
     }
-    
 }
 
 //Вычисление позиции курсора
@@ -286,11 +288,9 @@ function fieldSize() {
 function startRabbitPos() {
     let startX = 0;
     let startY = 0;
-    lastRabbitPositionX = startX;
-    lastRabbitPositionY = startY;
     let rabbit = document.getElementById('rabbit');
-    rabbit.style.left = `${lastRabbitPositionX}px`;
-    rabbit.style.top = `${lastRabbitPositionY}px`;
+    rabbit.style.left = `${startX}px`;
+    rabbit.style.top = `${startY}px`;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -302,7 +302,6 @@ function eventsListeners() {
     //Следим за курсором
     document.getElementById('field').addEventListener("mousemove", mousePosition);
     //Следим за кликом мышки
-    document.getElementById('field').addEventListener("click", shots);
     document.getElementById('field').addEventListener('click', bugsBunny.hit);
     //Следим за вводом с клавиатуры
     document.addEventListener('keydown', keyboardClick);

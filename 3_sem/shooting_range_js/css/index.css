@@ -9,7 +9,6 @@ body {
     height: 70vh;
     width: 70vw;
     background-color: white;
-    cursor: crosshair;
 }
 
 ul {
@@ -41,7 +40,6 @@ ul {
 }
 
 #rabbit img {
-    position: relative;
     height: 80px;
     width: 80px;
 }
@@ -70,7 +68,6 @@ ul {
 }
 
 #aim img {
-    position:absolute;
     height: 80px;
     width: 80px;
 }
