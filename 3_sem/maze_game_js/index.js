@@ -24,12 +24,12 @@
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //КОНСТАНТЫ
-
+const BLOCK_SIZE = 40;
 const QUANTITY_OF_TRACTORS = 1;
 const TRACTORS = [];
 const STARTING_POSITION = '1 1';
 const LIFES = 3;
-const STEP = 2;
+const STEP = 5;
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ
 let starting;
@@ -42,8 +42,8 @@ let matrix;
 //Вырисовывем блок в HTML
 function createBlock(bool,y,x) {
     let block = document.createElement('div');
-    block.style.height = '20px';
-    block.style.width = '20px';
+    block.style.height = `${BLOCK_SIZE}px`;
+    block.style.width = `${BLOCK_SIZE}px`;
     block.id = `${y} ${x}` 
     block.className = bool;
     document.getElementById('maze').append(block);
@@ -53,8 +53,8 @@ function createBlock(bool,y,x) {
 function mazeSize() {
     let width = document.getElementById('maze').getBoundingClientRect().width;
     let height = document.getElementById('maze').getBoundingClientRect().height;
-    let widthInBlocks = parseInt(width/20);
-    let heightInBlocks = parseInt(height/20);
+    let widthInBlocks = parseInt(width/BLOCK_SIZE);
+    let heightInBlocks = parseInt(height/BLOCK_SIZE);
     if (widthInBlocks < 5 || heightInBlocks < 5) {
         return alert('Sorry your display is so little(');
     }
@@ -114,8 +114,8 @@ function update() {
 
 //Нарисуем сам лабиринт
 function printMaze() {
-    document.getElementById('maze').style.gridTemplateColumns = `repeat(${mazeOpt[0]},20px)`;
-    document.getElementById('maze').style.gridTemplateRows = `repeat(${mazeOpt[1]},20px)`;
+    document.getElementById('maze').style.gridTemplateColumns = `repeat(${mazeOpt[0]},${BLOCK_SIZE}px)`;
+    document.getElementById('maze').style.gridTemplateRows = `repeat(${mazeOpt[1]},${BLOCK_SIZE}px)`;
     for (let i = 0; i<mazeOpt[1]; i++) {
         for (let j = 0; j<mazeOpt[0]; j++) {
             if (matrix[i][j] == 1) {
@@ -143,8 +143,6 @@ function createMAZE() {
 function GameStart() {
     createMAZE();
     Thomas = new MazeRunner(LIFES, document.getElementById('hero'));
-
-
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -236,14 +234,15 @@ class Tractor {
 let blueTractor = new Tractor(1,1);
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//ПЕРСОНАЖ
 
 class MazeRunner {
 
     constructor(life,hero) {
-        this.x = this.startPos()[0],
-        this.y = this.startPos()[1],
         this.life = life,
-        this.hero = hero
+        this.hero = hero,
+        this.x = this.startPos()[0],
+        this.y = this.startPos()[1]
     }
 
     startPos() {
@@ -252,7 +251,8 @@ class MazeRunner {
         let y = starting.top;
         return [x,y];
     }
-
+    
+    //Не работает
     setLifes() {
         for (let heart = 0; heart < this.life; heart++) {
             heart = document.createElement('img');
@@ -284,11 +284,12 @@ class MazeRunner {
     }
 
     conflict() {
-
+        let blocksOfWall = document.getElementsByClassName('false');
+        // for (let i = 0; i < blocksOfWall.length; i++) {
+        //     if (blocksOfWall[i].getBoundingClientRect().)
+        // }
     }
 }
-
-
 
 let Thomas;
 
@@ -322,6 +323,9 @@ function readyToStart() {
     mazeOpt = mazeSize();
     matrix = createMatrixOfMaze();
     document.addEventListener('keydown', keyboardClick);
+
+    document.getElementById('hero').style.width = `${BLOCK_SIZE/2}px`;
+    document.getElementById('hero').style.height = `${BLOCK_SIZE/2}px`;
     GameStart();
     
 }
