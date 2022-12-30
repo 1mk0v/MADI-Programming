@@ -2,6 +2,7 @@ body {
     color: white;
     background-color: black;
     size: 100%;
+    cursor: none;
 }
 
 #logo {
@@ -14,20 +15,40 @@ body {
 }
 
 #maze {
+    pointer-events: none;
     margin: 0 auto;
     display: grid;
-    /* grid-template-columns: repeat(10, 20px); */
     grid: 10px;
     height: 70vh;
     width: 70vw;
-    cursor: crosshair;
+}
+
+#life {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+}
+
+#hero {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: aquamarine;
+    z-index: 2;
+}
+
+.tractor {
+    background-color: red;
 }
 
 .true {
+    position: relative;
     background-color: #FFFFFF00;
 }
 
 .false {
+    position: relative;
     background-color: #FFFFFF;
 }
 
