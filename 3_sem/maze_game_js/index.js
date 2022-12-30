@@ -22,42 +22,32 @@
 //                                                                                                          //
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-//За основу взят метод рекурсивного деления
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//КОНСТАНТЫ
 
+const QUANTITY_OF_TRACTORS = 1;
+const TRACTORS = [];
+const STARTING_POSITION = '1 1';
+const LIFES = 3;
+const STEP = 2;
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ
-
-var mazeOpt;
-var matrix;
+let starting;
+let mazeOpt;
+let matrix;
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //ЛАБИРИНТ
 
-class Block {
-    //Вырисовывем блок в HTML
-    createBlock(bool) {
-        let block = document.createElement('div');
-        block.style.height = '20px';
-        block.style.width = '20px';
-        block.className = bool;
-        // block.classList.add = i;
-        // block.classList.add = j;
-        document.getElementById('maze').append(block);
-    }
+//Вырисовывем блок в HTML
+function createBlock(bool,y,x) {
+    let block = document.createElement('div');
+    block.style.height = '20px';
+    block.style.width = '20px';
+    block.id = `${y} ${x}` 
+    block.className = bool;
+    document.getElementById('maze').append(block);
 }
-
-let brick = new Block();
-
-
-//Возмем рандомную точку для в области
-function getRandomDot() {
-    // let width = document.getElementById('maze').getBoundingClientRect().width;
-    // let height = document.getElementById('maze').getBoundingClientRect().height;
-    let positionX = Math.floor(Math.random() * mazeOpt[0]);
-    let positionY = Math.floor(Math.random() * mazeOpt[1]);
-    return [positionX, positionY];
-}
-
 
 //Вычислим размеры лабиринта
 function mazeSize() {
@@ -66,70 +56,72 @@ function mazeSize() {
     let widthInBlocks = parseInt(width/20);
     let heightInBlocks = parseInt(height/20);
     if (widthInBlocks < 5 || heightInBlocks < 5) {
-        return alert('Sorry your display is so little(')
+        return alert('Sorry your display is so little(');
     }
 
-    if (widthInBlocks%2 == 0 && heightInBlocks%2 == 0) {
-        widthInBlocks = widthInBlocks - 1;
-        heightInBlocks = heightInBlocks - 1;
+    if (widthInBlocks%2 == 0) {
+        widthInBlocks += 1;
     }
     
-    return [widthInBlocks, heightInBlocks]
-}
+    if (heightInBlocks%2 == 0) {
+        heightInBlocks += 1;
+    }
 
+    return [widthInBlocks, heightInBlocks];
+}
 
 //Сделаем матрицу поля лабиринта
 function createMatrixOfMaze() {
     let matrix = new Array();
-    for (let i =0; i<mazeOpt[1]; i++) {
-        matrix[i] = new Array();
-        for (let j=0; j<mazeOpt[0]; j++) {
-            if ((i == 0 || i == mazeOpt[1]-1) && (j >= 0 || j <= mazeOpt[0]-1)) {
-                matrix[i][j] = 1;
-            } else if ((i > 0 && i < mazeOpt[1]-1) && (j == 0 || j == mazeOpt[0]-1)) {
-                matrix[i][j] = 1;
-            } else if (i%2 == 0 || j%2 ==0) {
-                matrix[i][j] = 1;
-            }
+    for (let y = 0; y<=mazeOpt[1]; y++) {
+        matrix[y] = new Array();
+        for (let x = 0; x<=mazeOpt[0]; x++) {
+            matrix[y][x] = 1;
         }
     }
+
+    //НАЧАЛЬНАЯ ПОЗИЦИЯ ЛАБИРИНТА
+    matrix[1][1] = 0;
     return matrix;
 }
 
-//Нарисуем стены в матрицу
-// function createNewWallInMatrix() {
-//     let positionOfWalls = getRandomDot();
-//     while (positionOfWalls[0] <= 4 || positionOfWalls[0] >= mazeOpt[0]-4 || positionOfWalls[1] <= 4 || positionOfWalls[1] >= mazeOpt[1] - 4) {
-//         positionOfWalls = getRandomDot();
-//     }
 
-//     for (let i = 0; i < mazeOpt[1]; i++) {
-//         matrix[i][positionOfWalls[0]] = 1;
-//     }
-
-//     for (let i = 0; i < mazeOpt[0]; i++) {
-//         matrix[positionOfWalls[1]][i] = 1;
-//     }
-// }
+//ГОТОВ ЛИ ЛАБИРИНТ
+function isReady() {
+    for (let y = 1; y < mazeOpt[1]; y+=2) {
+        for (let x = 1; x < mazeOpt[0]; x+=2) {
+                if (matrix[y][x]) {
+                    return false;
+                }
+            }
+        }
+    return true;
+}
+    
 
 
-
-function createWay() {
-        
+function update() {
+    for (let y=0; y<mazeOpt[1];y++) {
+        for (let x=0; x<mazeOpt[0];x++) {
+            if (matrix[y][x] == 1) {
+                document.getElementById(`${y} ${x}`).className = 'false';
+            } else {
+                document.getElementById(`${y} ${x}`).className = 'true';
+            }
+        }
+    }
 }
 
 //Нарисуем сам лабиринт
 function printMaze() {
-    
     document.getElementById('maze').style.gridTemplateColumns = `repeat(${mazeOpt[0]},20px)`;
     document.getElementById('maze').style.gridTemplateRows = `repeat(${mazeOpt[1]},20px)`;
-
-    for (let i =0; i<mazeOpt[1]; i++) {
-        for (let j=0; j<mazeOpt[0]; j++) {
+    for (let i = 0; i<mazeOpt[1]; i++) {
+        for (let j = 0; j<mazeOpt[0]; j++) {
             if (matrix[i][j] == 1) {
-                brick.createBlock('false');
+                createBlock('false', i, j);
             } else {
-                brick.createBlock('true');
+                createBlock('true', i,j);
             }
         }
     }
@@ -137,16 +129,191 @@ function printMaze() {
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //ИГРА
-function startGame() {
+
+function createMAZE() {
     printMaze();
+    while (!isReady()) {
+        for (let i = 0; i < 1000; i++){
+            blueTractor.createNewWay();
+        }
+        update();
+    }
+}
+
+function GameStart() {
+    createMAZE();
+    Thomas = new MazeRunner(LIFES, document.getElementById('hero'));
+
+
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//ПЕРСОНАЖ
+//ПЕРСОНАЖИ
+
+class Tractor {
+
+    constructor(x, y) {
+        this.x = x,
+        this.y = y
+    };
+
+    //Берет новое направление
+    getNewWay() {
+        let nextPos = [-2, 2];
+        return nextPos[Math.floor(Math.random() * 2)];        
+    }
+    
+    //Строит новый путь 
+    createNewWay() {
+        let newX;
+        let newY;
+
+        //Если выпадает 0, то смещение будет идти по оси Y
+        if (Math.floor(Math.random() * 2) == 0) {
+            newX = this.x;
+            newY = this.y + this.getNewWay();
+
+            while (!this.isInMaze(newY, newX)) {
+                newY = this.y + this.getNewWay();
+            }
+
+            if (matrix[newY][newX] == 1) {
+                if (this.y - newY > 0) {
+                    matrix[newY+1][newX] = 0;
+                    matrix[newY][newX] = 0;
+                } else {
+                    matrix[newY-1][newX] = 0;
+                    matrix[newY][newX] = 0;
+                }
+                
+
+            } else {
+                this.x = newX;
+                this.y = newY;
+            }
+            
+        //Если выпадает 1, то смещение будет идти по оси X
+        } else {
+            newX = this.x + this.getNewWay();
+            newY = this.y;
+            while (!this.isInMaze(newY, newX)) {
+                newX = this.x + this.getNewWay();
+            }
+
+            if (matrix[newY][newX] == 1) {
+                if (this.x - newX > 0) {
+                    matrix[newY][newX+1] = 0;
+                    matrix[newY][newX] = 0;
+                } else {
+                    matrix[newY][newX-1] = 0;
+                    matrix[newY][newX] = 0;
+                }
+                
+
+            } else {
+                this.x = newX;
+                this.y = newY;
+            }
+        }
+        
+        this.x = newX;
+        this.y = newY;
+    }
+
+    //Проверка находится ли трактор в лабиринте
+    isInMaze(y,x) {
+        if (1 <= y && y <= mazeOpt[1]-1 && 1 <= x && x <= mazeOpt[0]-1) {
+            return true;
+        }
+    }
+
+    //Рисует трактор
+    printMe() {
+        document.getElementById(`${this.y} ${this.x}`).className='tractor';
+    }
+}
+
+let blueTractor = new Tractor(1,1);
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//ПРАВИЛА ИГРЫ
 
+class MazeRunner {
+
+    constructor(life,hero) {
+        this.x = this.startPos()[0],
+        this.y = this.startPos()[1],
+        this.life = life,
+        this.hero = hero
+    }
+
+    startPos() {
+        let starting = document.getElementById(STARTING_POSITION).getBoundingClientRect();
+        let x = starting.left;
+        let y = starting.top;
+        return [x,y];
+    }
+
+    setLifes() {
+        for (let heart = 0; heart < this.life; heart++) {
+            heart = document.createElement('img');
+            heart.width = '15px';
+            heart.src = 'photo/heart.png'
+            document.getElementById('life').append(heart);
+        }
+    }
+
+    goUp() {
+        this.y -= STEP;
+        this.hero.style.top = `${this.y}px`
+
+    }
+
+    goRight() {
+        this.x += STEP;
+        this.hero.style.left = `${this.x}px`
+    }
+
+    goBottom() {
+        this.y += STEP;
+        this.hero.style.top = `${this.y}px`
+    }
+
+    goLeft() {
+        this.x -= STEP;
+        this.hero.style.left = `${this.x}px`
+    }
+
+    conflict() {
+
+    }
+}
+
+
+
+let Thomas;
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//УПРАВЛЕНИЕ КЛАВИАТУРОЙ
+
+function keyboardClick(event) {
+
+    switch (event.keyCode) {
+        case 87:
+            Thomas.goUp();
+            break;
+        case 65:
+            Thomas.goLeft();
+            break;
+        case 68:
+            Thomas.goRight();
+            break;
+        case 83:
+            Thomas.goBottom();
+            break;
+        default:
+            break;
+    }
+}
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //ОБРАБОТЧИКИ СОБЫТИЙ
@@ -154,8 +321,9 @@ function startGame() {
 function readyToStart() {
     mazeOpt = mazeSize();
     matrix = createMatrixOfMaze();
-    // createNewWallInMatrix();
-    startGame();
+    document.addEventListener('keydown', keyboardClick);
+    GameStart();
+    
 }
 
 document.addEventListener('DOMContentLoaded', readyToStart);
