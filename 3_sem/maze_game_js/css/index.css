@@ -3,7 +3,7 @@ body {
     background-color: black;
     size: 100%;
     font-family: 'Pixel';
-    cursor: none;
+    /* cursor: none; */
 }
 
 #logo {
@@ -19,7 +19,6 @@ body {
     pointer-events: none;
     margin: 0 auto;
     display: grid;
-    grid: 10px;
     height: 70vh;
     width: 70vw;
 }
@@ -41,13 +40,13 @@ body {
     background-color: red;
 }
 
-.true {
+.path {
     position: relative;
     pointer-events: none;
     background-color: #FFFFFF00;
 }
 
-.false {
+.wall {
     position: relative;
     background-color: #FFFFFF;
 }
