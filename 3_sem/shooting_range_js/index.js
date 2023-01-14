@@ -30,16 +30,16 @@ const STEP = 5;
 const STEP_AIM = 8;
 const START = {LEFT_CORNER: 0, CENTER: 1};
 const START_POSITION = 1;
+const RABBIT_LIFE = 5;
 
-let rabbitOpt;
+
+let bugsBunny;
 let aimOpt;
-let rabbit;
 let aim;
-
+let fieldOpt;
 let mousePositionX=0;
 let mousePositionY=0;
 let lastAimPositionX = 0;
-// let this.lifeOfRabbit = 3;
 let lastAimPositionY = 0;
 let shot = 0;
 let run;
@@ -51,43 +51,56 @@ let run;
 
 //enum
 
-
 class Rabbit {
 
-    constructor(life) {
-        this.lifeOfRabbit = life;
+    constructor(life, rabbit) {
+        this.lifeOfRabbit = life,
+        this.rabbit = rabbit,
+        this.rabbitOpt = this.rabbit.getBoundingClientRect()
+        this.setLife();
     }
-    
+
+    setLife() {
+        for (let i = 0; i < this.lifeOfRabbit; i++) {
+            let heart = document.createElement('img');
+            heart.className = 'alive'
+            heart.style.width = '5%';
+            heart.src = 'photo/heart.png'
+            document.getElementById(`life`).append(heart);
+        }
+    }
+
     startRabbitPos(startPos) {
         if (startPos == START.CENTER) {
-            this.lastRabbitPositionX = fieldSize()[1]/2-rabbit.getBoundingClientRect().width/2;
-            this.lastRabbitPositionY = fieldSize()[0]/2-rabbit.getBoundingClientRect().height/2;
+            this.lastRabbitPositionX = fieldOpt.width/2-this.rabbitOpt.width/2;
+            this.lastRabbitPositionY = fieldOpt.height/2-this.rabbitOpt.height/2;
         } else if (startPos == START.LEFT_CORNER) {
             this.lastRabbitPositionX = 0;
             this.lastRabbitPositionY = 0;
         }
     
-        rabbit.style.left = `${this.lastRabbitPositionX}px`;
-        rabbit.style.top = `${this.lastRabbitPositionY}px`;
+        this.rabbit.style.left = `${this.lastRabbitPositionX}px`;
+        this.rabbit.style.top = `${this.lastRabbitPositionY}px`;
     }
 
     //ЕГО МОЖНО ПОДСТРЕЛИТЬ
     hit() {
-        shots();
-        if (isReadyToHit()) {
-            switch (--this.lifeOfRabbit) {
-                case 2:
-                    document.getElementById('heart3').src = `${document.getElementsByTagName('script')[0].src.slice(0,-8)}photo/deadHeart.png`;
-                    break;
-                case 1:
-                    document.getElementById('heart2').src = `${document.getElementsByTagName('script')[0].src.slice(0,-8)}photo/deadHeart.png`;
-                    break;
-                case 0:
-                    document.getElementById('heart3').src = `${document.getElementsByTagName('script')[0].src.slice(0,-8)}photo/deadHeart.png`;
-                    break;
-                default:
-                    break;
-            }
+        this.shots();
+        if (this.isReadyToHit()) {
+            this.deleteLife();
+            // switch (--this.lifeOfRabbit) {
+            //     case 2:
+            //         document.getElementById('heart3').src = `${document.getElementsByTagName('script')[0].src.slice(0,-8)}photo/deadHeart.png`;
+            //         break;
+            //     case 1:
+            //         document.getElementById('heart2').src = `${document.getElementsByTagName('script')[0].src.slice(0,-8)}photo/deadHeart.png`;
+            //         break;
+            //     case 0:
+            //         document.getElementById('heart3').src = `${document.getElementsByTagName('script')[0].src.slice(0,-8)}photo/deadHeart.png`;
+            //         break;
+            //     default:
+            //         break;
+            // }
         }
     }
 
@@ -95,8 +108,8 @@ class Rabbit {
     run() {
 
         //Новые пути
-        let newPathX = getRandomInt();
-        let newPathY = getRandomInt();
+        let newPathX = this.getRandomInt();
+        let newPathY = this.getRandomInt();
         //Следующая позиция
         // let time = 0;
 
@@ -107,23 +120,23 @@ class Rabbit {
                 let newRabbitPositionX = this.lastRabbitPositionX + newPathX;
                 let newRabbitPositionY = this.lastRabbitPositionY + newPathY;
   
-                while (newRabbitPositionX < 0 || newRabbitPositionX > fieldSize()[1] - rabbit.getBoundingClientRect().width) {
-                    newPathX = getRandomInt();
+                while (newRabbitPositionX < 0 || newRabbitPositionX > fieldOpt.width - rabbit.getBoundingClientRect().width) {
+                    newPathX = this.getRandomInt();
                     newRabbitPositionX = this.lastRabbitPositionX + newPathX;
                 }
                 
-                while (newRabbitPositionY < 0 || newRabbitPositionY > fieldSize()[0] - rabbit.getBoundingClientRect().height) {
-                    newPathY = getRandomInt();
+                while (newRabbitPositionY < 0 || newRabbitPositionY > fieldOpt.height - rabbit.getBoundingClientRect().height) {
+                    newPathY = this.getRandomInt();
                     newRabbitPositionY = this.lastRabbitPositionY + newPathY;
                 }
 
-                rabbit.style.left = `${newRabbitPositionX}px`;
-                rabbit.style.top = `${newRabbitPositionY}px`;
+                this.rabbit.style.left = `${newRabbitPositionX}px`;
+                this.rabbit.style.top = `${newRabbitPositionY}px`;
 
                 this.lastRabbitPositionX = newRabbitPositionX;
                 this.lastRabbitPositionY = newRabbitPositionY;
 
-                rabbitOpt = rabbit.getBoundingClientRect();
+                this.rabbitOpt = this.rabbit.getBoundingClientRect();
             }, time);
         }      
     }
@@ -134,12 +147,39 @@ class Rabbit {
             return true;
         } 
     }
+
+    //Считает количество выстрелов
+    shots() {
+        if (!this.isDead()){
+            shot += 1;
+            document.getElementById('shotNum').innerHTML = shot;
+        }
+    }
+
+    //ГОТОВНОСТЬ К УДАРУ
+    isReadyToHit() {
+        return aimOpt.left > this.rabbitOpt.left - aimOpt.width/2 &&
+            aimOpt.right < this.rabbitOpt.right + aimOpt.width/2 &&
+            aimOpt.top > this.rabbitOpt.top - aimOpt.height/2 &&
+            aimOpt.bottom < this.rabbitOpt.bottom + aimOpt.height/2;
+    }
+    
+    deleteLife() {
+        if (!this.isDead()) {
+            let aliveHearts = document.getElementsByClassName('alive');
+            aliveHearts[--this.lifeOfRabbit].src = `${document.getElementsByTagName('script')[0].src.slice(0,-8)}photo/deadHeart.png`
+            if (this.isDead()) {
+                GameStop();
+            }
+        } 
+    }
+
+    //НОВЫЙ ПУТЬ
+    getRandomInt() {
+        let nextPos = [-STEP, 0, STEP];
+        return nextPos[Math.floor(Math.random() * 3)];
+    }
 }
-
-
-//СОЗДАЮ ЭКЗМЕПЛЯР ПЕРСОНАЖА
-let bugsBunny = new Rabbit(3);
-
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //GAME
@@ -154,25 +194,20 @@ function GameStart() {
 
 function GameStop() {
     clearInterval(run);
-    document.getElementById('field').removeEventListener("click", shots);
+    document.getElementById('field').removeEventListener("click", bugsBunny.shots.bind(bugsBunny));
     document.getElementById('rabbitIMG').src = `${document.getElementsByTagName('script')[0].src.slice(0,-8)}photo/ghost.gif`;
-    document.getElementById('life').innerHTML = 'GAME OVER!';
+    let life = document.getElementById('life')
+    life.innerHTML = 'GAME OVER!';
+    life.style.justifyContent = 'center';
     getRestart();
 }
 
 function getRestart() {
     let resDiv = document.createElement('div');
     resDiv.id = 'restart';
-    resDiv.style.width = '300px'
-    resDiv.style.margin = '5vh auto';
-    resDiv.style.textAlign = 'center';
-    resDiv.style.fontSize = '20px';
-    resDiv.style.color = 'red';
     let resDivText = document.createElement('p');
     resDivText.innerHTML = 'Restart Game!' 
-    resDivText.style.cursor = 'pointer';
     resDivText.id = 'restartText';
-
     document.body.appendChild(resDiv);
     document.getElementById('restart').appendChild(resDivText);
     document.getElementById('restartText').addEventListener('click', restart);
@@ -180,24 +215,6 @@ function getRestart() {
 
 function restart() {
     location.reload();
-}
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//НОВЫЙ ПУТЬ
-
-function getRandomInt() {
-    let nextPos = [-STEP, 0, STEP];
-    return nextPos[Math.floor(Math.random() * 3)];
-}
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//ГОТОВНОСТЬ К УДАРУ
-
-function isReadyToHit() {
-    return aimOpt.left > rabbitOpt.left - aimOpt.width/2 &&
-        aimOpt.right < rabbitOpt.right + aimOpt.width/2 &&
-        aimOpt.top > rabbitOpt.top - aimOpt.height/2 &&
-        aimOpt.bottom < rabbitOpt.bottom + aimOpt.height/2;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -228,7 +245,7 @@ function keyboardClick(event) {
 
 function aimUP() {
     aimOpt = aim.getBoundingClientRect();
-    if (lastAimPositionY - STEP_AIM  > fieldSize()[3]) {
+    if (lastAimPositionY - STEP_AIM  > fieldOpt.top) {
         lastAimPositionY -= STEP_AIM;
         aim.style.top = `${lastAimPositionY}px`;
     }
@@ -236,7 +253,7 @@ function aimUP() {
 
 function aimLEFT() {
     aimOpt = aim.getBoundingClientRect();
-    if (lastAimPositionX - STEP_AIM > fieldSize()[2]) {
+    if (lastAimPositionX - STEP_AIM > fieldOpt.left) {
         lastAimPositionX -= STEP_AIM;
         aim.style.left = `${lastAimPositionX}px`;
     }
@@ -244,7 +261,7 @@ function aimLEFT() {
 
 function aimRIGHT() {
     aimOpt = aim.getBoundingClientRect();
-    if (lastAimPositionX + STEP_AIM < fieldSize()[2]+fieldSize()[1]-aimOpt.width) {
+    if (lastAimPositionX + STEP_AIM < fieldOpt.left+fieldOpt.width-aimOpt.width) {
         lastAimPositionX += STEP_AIM;
         aim.style.left = `${lastAimPositionX}px`;
     }
@@ -252,7 +269,7 @@ function aimRIGHT() {
 
 function aimDOWN() {
     aimOpt = aim.getBoundingClientRect();
-    if (lastAimPositionY + STEP_AIM < fieldSize()[3]+fieldSize()[0]-aimOpt.height) {
+    if (lastAimPositionY + STEP_AIM < fieldOpt.top+fieldOpt.height-aimOpt.height) {
         lastAimPositionY += STEP_AIM;
         aim.style.top = `${lastAimPositionY}px`;
     }
@@ -264,14 +281,6 @@ function aimHIT() {
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-//Считает количество выстрелов
-function shots() {
-    if (!bugsBunny.isDead()){
-        shot += 1;
-        document.getElementById('shotNum').innerHTML = shot;
-    }
-}
-
 //Вычисление позиции курсора
 //Курсор вычисляется относительно всего окна
 function mousePosition(event) {
@@ -279,34 +288,37 @@ function mousePosition(event) {
     document.getElementById('field').style.cursor = 'none';
     mousePositionX = event.offsetX;
     mousePositionY = event.offsetY;
-    lastAimPositionX = mousePositionX+fieldSize()[2]-aimOpt.width/2;
-    lastAimPositionY = mousePositionY+fieldSize()[3]-aimOpt.height/2;
+    lastAimPositionX = mousePositionX+fieldOpt.left-aimOpt.width/2;
+    lastAimPositionY = mousePositionY+fieldOpt.top-aimOpt.height/2;
     aim.style.left = `${lastAimPositionX}px`;
     aim.style.top = `${lastAimPositionY}px`;
 }
 
 //Вычисление размера окна
 function fieldSize() {
-    let height = document.getElementById('field').getBoundingClientRect().height;
-    let width = document.getElementById('field').getBoundingClientRect().width;
-    let startX = document.getElementById('field').getBoundingClientRect().left;
-    let startY = document.getElementById('field').getBoundingClientRect().top;
-    let size = [height, width, startX, startY];
-    return size;
+    let field = document.getElementById('field');
+    let height = field.getBoundingClientRect().height;
+    let width = field.getBoundingClientRect().width;
+    let startX = field.getBoundingClientRect().left;
+    let startY = field.getBoundingClientRect().top;
+    return {top: startY,
+            left: startX,
+            width: width,
+            height: height};
 }
-
-//Стартовая позиция кролика (относительно окна)
-
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function eventsListeners() {
-    rabbit = document.getElementById('rabbit');
+    let rabbit = document.getElementById('rabbit');
     aim = document.getElementById('aim');
-    rabbitOpt = rabbit.getBoundingClientRect();
     aimOpt = aim.getBoundingClientRect();
     //Ставим начальную позицию кролику
-    bugsBunny.startRabbitPos(START_POSITION);
+    bugsBunny = new Rabbit(RABBIT_LIFE, rabbit);
+    setTimeout(() => {
+        fieldOpt = fieldSize();
+        bugsBunny.startRabbitPos(START_POSITION);
+    }, 100);
     //Обработка события ОБЯЗАТЕЛЬНО ВНУТРИ ПОЛЯ, иначе будет отсчитывать от всего окна!
     //Следим за курсором
     document.getElementById('field').addEventListener("mousemove", mousePosition);
