@@ -1,0 +1,17 @@
+#waterOfFirstJug {
+    width: 100%;
+    background-color: blue;
+    font-size: 20px;
+    color: white;
+    position:absolute;
+    bottom: 0;
+}
+
+#waterOfSecondJug {
+    width: 100%;
+    background-color: blue;
+    font-size: 20px;
+    color: white;
+    position:absolute;
+    bottom: 0;
+}

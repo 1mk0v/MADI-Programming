@@ -1,0 +1,74 @@
+body {
+    color: #ff0000;
+    overflow-y: hidden;
+    margin: 0;
+
+}
+
+#interface {
+    font-size: 5vh;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    text-align: right;
+    background-color: black;
+    height: 15vh;
+    width: 99.8vw;
+    border: 0.1vw solid #5eff00 ;
+}
+
+#score {
+    display: flex;
+    text-align: center;
+    width: 20vw;
+}
+
+#borderLife {
+    border-radius: 10px;
+    border: 0.2vw solid #FFFFFF;
+    width: 30vw;
+    height: 3vh;
+}
+
+#lineLife {
+    border-radius: 10px;
+    background-color: #ff0000;
+    height: 100%;
+}
+
+#space {
+    background-image: url('../photo/outerspace-70.gif');
+    background-repeat: no-repeat;
+    background-size: 100vw;
+    height: 85vh;
+    width: 100vw;
+    cursor: none;
+}
+#blaster {
+    position:absolute;
+    height: 100px;
+    width: 100px;
+    pointer-events: none;
+    box-shadow: none;
+    border: 0px;
+    z-index: 2;
+}
+
+#blaster img{
+    width: 100px;
+    height: 100px;
+}
+
+#spaceship {
+    position: relative;
+    height: 100px;
+    width: 100px;
+    pointer-events: none;
+    border: 0px;
+
+}
+
+#spaceship img {
+    width: 100px;
+    height: 100px;
+}
