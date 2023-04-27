@@ -1,17 +1,25 @@
 
 
 const SelectComponent = {
-    // emits: ['countPlus'], //создает событие
-    props: ['comData'], //передаваемое значение
+    props: ['comData'],
+    data() {
+        return {
+            data: '',
+            objectValues: ''
+        }
+    },
     template: 
     `<div class='check-boxes'>
+    <input type='text' v-model='data' @keypress='addNewSymbol'>
         <div v-for="word in comData">
             <label for='{{word.id}}'>{{word.id}}</label>
             <input type="checkbox" id='{{word.id}}'>
         </div>
     </div>`,
-    methods: {
-        
+    computed: {
+        addNewSymbol() {
+            this.$emit('newSymbolEvent', this.data);
+        }
     }
     
 }

@@ -4,15 +4,20 @@ import { data } from "./data.js";
 const App = {
     data() {
         return {
-            data: data 
+            data: data,
+            selected: ''
         }
     },
     template: `
     <form>
-        <input>
-        <select-component :comData='data'></select-component>
-    <form>
-    <textarea></textarea>`,
+        <select-component :comData='data' @newSymbolEvent='addToTextarea'></select-component>
+    </form>
+    <textarea :value='selected'></textarea>`,
+    methods: {
+        addToTextarea(text) {
+            this.selected=text
+        }
+    },
     components: {
         'select-component': SelectComponent
     }
