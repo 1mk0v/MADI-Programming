@@ -1,25 +1,34 @@
-import { SelectComponent } from "./components.js";
+import { CheckboxComponent } from "./components/checkbox.js";
+import { InputComponent } from "./components/input.js";
 import { data } from "./data.js";
 
 const App = {
     data() {
         return {
-            data: data,
-            selected: ''
+            objectKeys: data,
+            selected: [],
+            textareaValue:""
         }
     },
     template: `
     <form>
-        <select-component :comData='data' @newSymbolEvent='addToTextarea'></select-component>
+        <input-component 
+        :alreadyAdd='selected'
+        @changeInputEvent='getNewSelected'></input-component>
+        <checkbox-component
+        :objects='objectKeys'
+        :alreadyAdd='selected'
+        @changeCheckboxEvent='getNewSelected'></checkbox-component>
     </form>
-    <textarea :value='selected'></textarea>`,
+    <textarea :value='textareaValue'></textarea>`,
     methods: {
-        addToTextarea(text) {
-            this.selected=text
-        }
+        getNewSelected(data) {
+            console.log('waewq')
+        },
     },
     components: {
-        'select-component': SelectComponent
+        'checkbox-component': CheckboxComponent,
+        'input-component': InputComponent
     }
 }
 
