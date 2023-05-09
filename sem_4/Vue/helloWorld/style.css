@@ -1,0 +1,40 @@
+body {
+    margin: 0;
+    background-color: #5e5e5e;
+    color: #FFF;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+#say-hi {
+    position: relative;
+    margin-top: 20vh;
+    font-size: 3vw;
+    font-weight: 800;
+    text-align: center;
+}
+
+.counter-block {
+    margin:5vh auto;
+    height: 10vh;
+    width: 30vw;
+    display: flex;
+    position: relative;
+    font-size: 2.5vw;
+    font-weight: 500;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    border: solid 10px #FFF;
+    border-radius: 20px;
+}
+
+.counter-block button {
+    color: #FFF;
+    width: 10vw;
+    height: 3vh;
+    border: solid 3px #FFF;
+    border-radius: 5px;
+    background-color: #353535;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-size: 1vw;
+}

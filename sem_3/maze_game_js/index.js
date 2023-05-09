@@ -24,7 +24,7 @@
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //КОНСТАНТЫ
-const BLOCK_SIZE = 100;
+const BLOCK_SIZE = 50;
 const STARTING_POSITION = '1 0';
 const LIFES = 5;
 const STEP = BLOCK_SIZE/10;
@@ -451,14 +451,16 @@ function printMaze() {
 ///////////////////////////////////////////////////////
 //Создаем лабиринт
 function createMAZE() {
+    let startTime = new Date
     printMaze();
     while (!isReady()) {
-        for (let i = 0; i < 1000; i++){
+        for (let i = 0; i < 100; i++){
             blueTractor.createNewWay();
         }
         update();
     }
-    
+    let endTime = new Date
+    console.log(endTime-startTime)
     // run = setInterval(() => {
     //     if (!isReady()) {
     //         blueTractor.createNewWay();
