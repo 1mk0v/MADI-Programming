@@ -4,16 +4,19 @@ import string
 import secrets
 import time
 from simple_term_menu import TerminalMenu
+from tabulate import tabulate
+
 
 
 all_names = []
 CS_container = []
 CA_container = {}
 CS_name_founded = []
-CA_name_founded = []
 CS_time_statistic = []
+CS_one_time = []
+CA_name_founded = []
 CA_time_statistic = []
-
+CA_one_time = []
 
 def main():
     add_name()
@@ -50,44 +53,59 @@ def print_main_menu():
 
 def print_statistic():
     os.system('clear')
-    print('Count' ,'CA', 'CA_FOUND', 'CS', 'CS_FOUND')
-    count = 1
-    for i in range(len(CA_time_statistic)):
-        if i != 0:
-            count *= 2
-        print(count ,CA_time_statistic[i].ljust(15), CA_name_founded[i], CS_time_statistic[i].ljust(15), CS_name_founded[i])
-    input('Press any key')
+    table = {"CA_time": CA_time_statistic,
+            "CA_found": CA_name_founded,
+            "CA_one_time": CA_one_time,
+            "CS_time": CS_time_statistic,
+            "CS_found": CS_name_founded,
+            "CS_one_time": CS_one_time}
+    print(tabulate(table, headers=['CA_time','CA_found', 'CA_one_time', 'CS_time', 'CS_found', 'CS_one_time'], tablefmt="grid"))
+    input('Press any ENTER')
 
 
 def find_all():
     CS_found = 0
+    CS_time_one_find = 0
     CS_start_time = time.time() 
-    for name in all_names: 
-        CS_found +=find_CS_name(name) 
+    for name in all_names:
+        result = find_CS_name(name)
+        CS_found += result['num']
+        CS_time_one_find += result['time'] 
     CS_end_time = time.time() 
     CS_time_statistic.append(str((CS_end_time-CS_start_time)))
     CS_name_founded.append(str(CS_found))
+    CS_one_time.append(CS_time_one_find/CS_found)
 
     CA_found = 0
+    CA_time_one_find = 0
     CA_start_time = time.time() 
-    for name in all_names: 
-        CA_found += find_CA_name(name) 
+    for name in all_names:
+        result = find_CA_name(name)
+        CA_found += result['num']
+        CA_time_one_find += result['time']
     CA_end_time = time.time() 
     CA_time_statistic.append(str((CA_end_time-CA_start_time))) 
     CA_name_founded.append(str(CA_found))
+    CA_one_time.append(CA_time_one_find/CA_found)
 
 def find_CS_name(name):
-    num = 0
+    result = {}
+    start_time = time.time()
     if name in CS_container:
-        num = 1  
-    return num 
+        result['num'] = 1
+    end_time = time.time()
+    result['time'] = end_time - start_time
+    return result 
 
 
 def find_CA_name(name):
-    num = 0
+    result = {}
+    start_time = time.time()
     if name in CA_container.keys():
-        num = 1  
-    return num
+        result['num'] = 1
+    end_time = time.time()
+    result['time'] = end_time - start_time
+    return result
 
 
 def get_action(num_of_action):
