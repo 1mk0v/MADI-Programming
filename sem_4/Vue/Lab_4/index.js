@@ -6,25 +6,45 @@ const App = {
     data() {
         return {
             objectKeys: data,
-            selected: [],
-            textareaValue:""
+            selected: [{a: false},
+                       {b: false},
+                       {c: false},
+                       {d: false},
+                       {e: false},
+                       {f: false},
+                       {g: false}]
+            
         }
     },
     template: `
     <form>
         <input-component 
-        :alreadyAdd='selected'
-        @changeInputEvent='getNewSelected'></input-component>
+            v-model:alreadyAdd='setData'
+            @changeInputEvent='getNewSelected'></input-component>
         <checkbox-component
-        :objects='objectKeys'
-        :alreadyAdd='selected'
-        @changeCheckboxEvent='getNewSelected'></checkbox-component>
+            :objects='objectKeys'
+            v-model:alreadyAdd='selected'
+            @changeCheckboxEvent='getNewSelected'></checkbox-component>
     </form>
-    <textarea :value='textareaValue'></textarea>`,
+    <textarea
+        :value='setData'></textarea>`,
     methods: {
         getNewSelected(data) {
-            console.log('waewq')
+            console.log(data)
+            this.selected = data;
         },
+    },
+    computed: {
+        setData: function () {
+            let data = ''
+            for (let key in this.selected) {
+                
+                if (this.selected[key] == true) {
+                    data += key.toString()
+                }
+            }
+            return data
+        }
     },
     components: {
         'checkbox-component': CheckboxComponent,

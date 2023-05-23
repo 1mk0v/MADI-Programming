@@ -9,29 +9,23 @@ const CheckboxComponent = {
         }
     },
     template: `
-        <div v-for="word in objects">
-            <input type="checkbox" :id='word.id' :value='word.id' v-model='data' @click='changed'>
-            <label :for='word.id'>{{word.id}}</label>
-        </div>
-        <div>{{data}}</div>`,
+        <p>{{data}}</p>
+        <div v-for="(word,index) in objects">
+            <input type="checkbox"
+                :id='word.id'
+                v-model='data[index][word.id]'
+                @click='changed'>
+            <label :for='word.id'>{{word.text}}</label>
+        </div>`,
     methods: {
+        changed() {
+            console.log(this.data)
+            this.$emit('changeCheckboxEvent', this.data);
+        },
     },
     computed: {
-        changed() {
-            this.$emit('changeCheckboxEvent', this.data)
-        },
         
-        // addNewSymbol(event) {
-        //     console.log(event.key)
-        //     for (let item in this.data) {
-        //         let object = this.data[item]
-        //         if (event.key == object.id && object.text in this.selected) {
-        //             console.log(event.key)
-        //             this.selected.push(object.text)
-        //             return
-        //         }
-        //     }
-        // }
+
     }
 }
 

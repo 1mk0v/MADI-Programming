@@ -8,26 +8,16 @@ const InputComponent = {
         }
     },
     template: `
-        <input type='text' v-model='data' @keypress='changed'>
-        <div>{{data}}</div>`,
-    methods:{
-        getNewDataForm: function (data) {
-            console.log('InputComponent')
-            let newWord = ''
-            for (let i in data) {
-                newWord += data[i]
-            }
-            return newWord
-        },
-        
-    },
+        <input
+            type='text'
+            v-model='data'
+            @keydown='changed'>`,
     computed: {
         changed(){
-            this.$emit('changeInputEvent', this.data)
+            let ourData = this.data;
+            this.$emit('changeInputEvent', ourData);
         }
-    }
-
-        
-    }    
+    }        
+}    
 
 export { InputComponent }
