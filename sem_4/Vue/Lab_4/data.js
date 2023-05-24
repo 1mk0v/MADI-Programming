@@ -8,4 +8,13 @@ const data = [
     {id: 'g', text: 'good'}
 ]
 
-export {data}
+function getData() {
+    let mySelected = {}
+    for (let object of data) {
+        mySelected[object['id']] = false
+    }
+    console.log(mySelected)
+    return mySelected
+}
+
+export {data, getData}

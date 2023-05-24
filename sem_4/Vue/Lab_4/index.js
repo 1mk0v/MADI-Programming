@@ -1,50 +1,51 @@
 import { CheckboxComponent } from "./components/checkbox.js";
 import { InputComponent } from "./components/input.js";
-import { data } from "./data.js";
+import { data, getData } from "./data.js";
 
 const App = {
     data() {
         return {
             objectKeys: data,
-            selected: [{a: false},
-                       {b: false},
-                       {c: false},
-                       {d: false},
-                       {e: false},
-                       {f: false},
-                       {g: false}]
-            
+            textareaData: '',
+            selected: getData()
         }
     },
     template: `
     <form>
-        <input-component 
-            v-model:alreadyAdd='setData'
-            @changeInputEvent='getNewSelected'></input-component>
+        <input-component
+            :selected='selected'
+            @changeInputEvent='getNewSelected'>
+        </input-component>
         <checkbox-component
-            :objects='objectKeys'
-            v-model:alreadyAdd='selected'
-            @changeCheckboxEvent='getNewSelected'></checkbox-component>
+            :selected='selected'
+            @changeCheckboxEvent='getNewSelected'>
+        </checkbox-component>
     </form>
     <textarea
-        :value='setData'></textarea>`,
+        readonly
+        :value='textareaData'
+        class="uk-textarea">
+    </textarea>`,
     methods: {
         getNewSelected(data) {
-            console.log(data)
+            let text = '';
             this.selected = data;
-        },
-    },
-    computed: {
-        setData: function () {
-            let data = ''
-            for (let key in this.selected) {
-                
+            for (let key in data) {
                 if (this.selected[key] == true) {
-                    data += key.toString()
+                    let index = this.objectKeys.findIndex(el => el['id'] === key);
+                    text += this.objectKeys[index]['text'] + ' '
+                }
+            }
+            this.textareaData = text
+        },
+        setData: function () {
+            for (let key of data) {
+                if (this.selected[key] == true) {
+                    console.log(key)
                 }
             }
             return data
-        }
+        },
     },
     components: {
         'checkbox-component': CheckboxComponent,

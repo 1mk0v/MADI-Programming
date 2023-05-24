@@ -1,32 +1,32 @@
 
 
 const CheckboxComponent = {
-    props: ['objects','alreadyAdd'],
+    props: ['selected'],
     emits:['changeCheckboxEvent'],
     data() {
         return {
-            data: this.alreadyAdd
+            data: this.selected,
         }
     },
     template: `
-        <p>{{data}}</p>
-        <div v-for="(word,index) in objects">
-            <input type="checkbox"
-                :id='word.id'
-                v-model='data[index][word.id]'
-                @click='changed'>
-            <label :for='word.id'>{{word.text}}</label>
-        </div>`,
-    methods: {
+    <div class="uk-flex uk-margin uk-grid-small uk-child-width-auto uk-grid">
+        <div v-for="(value,key) in this.selected">
+        <p>{{value}} {{key}}</p>
+        <input
+            class="uk-checkbox"
+            type="checkbox"
+            :id='key'
+            v-model='data[key]'
+            @change='changed'>
+        <label :for='key'>{{key}}</label>
+        </div>
+    </div>`,
+    computed: {
         changed() {
-            console.log(this.data)
-            this.$emit('changeCheckboxEvent', this.data);
+            console.log(this.selected)
+            this.$emit('changeCheckboxEvent', this.selected);
         },
     },
-    computed: {
-        
-
-    }
 }
 
 export { CheckboxComponent }
