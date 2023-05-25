@@ -1,13 +1,13 @@
 import { CheckboxComponent } from "./components/checkbox.js";
 import { InputComponent } from "./components/input.js";
-import { data, getData } from "./data.js";
+import { data, boolData } from "./data.js";
 
 const App = {
     data() {
         return {
             objectKeys: data,
             textareaData: '',
-            selected: getData()
+            selected: boolData
         }
     },
     template: `
@@ -28,8 +28,9 @@ const App = {
     </textarea>`,
     methods: {
         getNewSelected(data) {
+            console.log(data)
+            Object.assign(this.selected,data);
             let text = '';
-            this.selected = data;
             for (let key in data) {
                 if (this.selected[key] == true) {
                     let index = this.objectKeys.findIndex(el => el['id'] === key);

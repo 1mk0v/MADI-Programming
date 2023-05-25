@@ -13,8 +13,10 @@ function getData() {
     for (let object of data) {
         mySelected[object['id']] = false
     }
-    console.log(mySelected)
     return mySelected
 }
 
-export {data, getData}
+let boolData = getData()
+console.log(boolData)
+
+export {data, boolData}

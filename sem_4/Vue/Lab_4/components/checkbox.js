@@ -1,30 +1,37 @@
 
 
 const CheckboxComponent = {
-    props: ['selected'],
+    props: {selected: Object},
     emits:['changeCheckboxEvent'],
     data() {
         return {
-            data: this.selected,
+            data: Object.assign({}, this.selected),
         }
     },
     template: `
     <div class="uk-flex uk-margin uk-grid-small uk-child-width-auto uk-grid">
-        <div v-for="(value,key) in this.data">
-        <p>{{value}} {{key}}</p>
-        <input
-            class="uk-checkbox"
-            type="checkbox"
-            :id='key'
-            v-model='this.data[key]'
-            @change='changed'>
-        <label :for='key'>{{key}}</label>
+        <div v-for="(value,key) in data">
+            <p>{{value}} {{key}}</p>
+            <input
+                class="uk-checkbox"
+                type="checkbox"
+                :id='key'
+                v-model='data[key]'
+                @change='changed'>
+            <label :for='key'>{{key}}</label>
         </div>
     </div>`,
-    computed: {
+    watch: {
+        selected: {
+            handler(){
+                this.data = Object.assign({}, this.selected)
+            },
+            deep:true
+        }
+    },
+    methods: {
         changed() {
-            console.log(this.selected)
-            this.$emit('changeCheckboxEvent', this.selected);
+            this.$emit('changeCheckboxEvent', this.data);
         },
     },
 }

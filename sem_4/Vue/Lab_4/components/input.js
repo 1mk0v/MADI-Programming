@@ -1,10 +1,10 @@
 
 const InputComponent = {
-    props:['selected'],
+    props:{selected:Object},
     emits:['changeInputEvent'],
     data() {
         return {
-            inputSelected: this.selected,
+            inputSelected: Object.assign({},this.selected),
             newData: '',
             symbols: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
         }
@@ -14,11 +14,37 @@ const InputComponent = {
             class="uk-input"
             type='text'
             v-model='newData'
-            @keydown='changed'>`,
+            @keyup='updateVaribles'>`,
     watch: {
+        selected: {
+            handler() {
+                console.log(this.selected)
+                let string = ''
+                for (let key in this.selected) {
+                    if (this.selected[key] == true) {
+                        string += key
+                    }
+                }
+                this.newData = string
+            },
+            deep: true
+        }
+    },
+
+    methods: {
+        updateVaribles: function(event) {
+            for (let key in this.inputSelected) {
+                if (this.newData.indexOf(key) > -1) {
+                    this.inputSelected[key] = true;
+                } else {
+                    this.inputSelected[key] = false;
+                }
+            }
+            this.$emit('changeInputEvent', this.inputSelected);
+        },
         getValue: function() {
             let string = ''
-            for (let key of this.selected) {
+            for (let key of this.inputSelected) {
                 if (this.selected[key] == true) {
                     string += key
                 }
@@ -26,24 +52,6 @@ const InputComponent = {
             return string
         }
     },
-    methods: {
-        updateVaribles: function() {
-            for (let key in this.inputSelected) {
-                if (this.newData.indexOf(key) > -1) {
-                    this.inputSelected[key] = true
-                } else {
-                    this.inputSelected[key] = false
-                }
-            }
-        }
-    },
-    computed: {
-        changed: function() {
-            this.updateVaribles()
-            this.$emit('changeInputEvent', this.inputSelected);
-        },
-       
-    }
 }
 
 export { InputComponent }
