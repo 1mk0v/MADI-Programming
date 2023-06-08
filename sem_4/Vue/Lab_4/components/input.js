@@ -5,7 +5,7 @@ const InputComponent = {
     data() {
         return {
             inputSelected: Object.assign({},this.selected),
-            newData: ''
+            newData: '',
         }
     },
     template: `
@@ -32,7 +32,6 @@ const InputComponent = {
 
     methods: {
         updateVaribles: function() {
-            console.log('update')
             for (let key in this.inputSelected) {
                 if (this.newData.indexOf(key) > -1) {
                     this.inputSelected[key] = true;
@@ -43,8 +42,7 @@ const InputComponent = {
             this.$emit('changeInputEvent', this.inputSelected);            
         },
         blockVaribles: function(event) {
-            console.log(event.key)
-            if ((!this.symbols.includes(event.key) && event.key !='Backspace') || this.newData.indexOf(event.key) > -1) {
+            if ((!this.symbols.includes(event.key) && !['Backspace', 'ArrowLeft','ArrowRight'].includes(event.key) ) || this.newData.indexOf(event.key) > -1) {
                 event.preventDefault();
             }
         }
