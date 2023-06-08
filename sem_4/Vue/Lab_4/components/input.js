@@ -18,13 +18,11 @@ const InputComponent = {
     watch: {
         selected: {
             handler() {
-                let string = ''
                 for (let key in this.selected) {
-                    if (this.selected[key] == true) {
-                        string += key
-                    }
+                    if (!this.newData.includes(key) && this.selected[key]) {
+                        this.newData += key
+                    } 
                 }
-                this.newData = string
             },
             deep: true
         },
@@ -42,7 +40,7 @@ const InputComponent = {
             this.$emit('changeInputEvent', this.inputSelected);            
         },
         blockVaribles: function(event) {
-            if ((!this.symbols.includes(event.key) && !['Backspace', 'ArrowLeft','ArrowRight'].includes(event.key) ) || this.newData.indexOf(event.key) > -1) {
+            if ((!this.symbols.includes(event.key) && !['Backspace', 'ArrowLeft','ArrowRight', 'Delete'].includes(event.key) ) || this.newData.indexOf(event.key) > -1) {
                 event.preventDefault();
             }
         }
