@@ -43,7 +43,8 @@ const InputComponent = {
             this.$emit('changeInputEvent', this.inputSelected);            
         },
         blockVaribles: function(event) {
-            if (!this.symbols.includes(event.key) || this.newData.indexOf(event.key) > -1) {
+            console.log(event.key)
+            if ((!this.symbols.includes(event.key) && event.key !='Backspace') || this.newData.indexOf(event.key) > -1) {
                 event.preventDefault();
             }
         }
