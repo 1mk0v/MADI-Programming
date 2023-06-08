@@ -1,6 +1,6 @@
 
 const InputComponent = {
-    props:{selected:Object},
+    props:{selected:Object, symbols:Array},
     emits:['changeInputEvent'],
     data() {
         return {
@@ -43,8 +43,7 @@ const InputComponent = {
             this.$emit('changeInputEvent', this.inputSelected);            
         },
         blockVaribles: function(event) {
-            let index_key = this.newData.indexOf(event.key)
-            if (index_key > -1) {
+            if (!this.symbols.includes(event.key) || this.newData.indexOf(event.key) > -1) {
                 event.preventDefault();
             }
         }

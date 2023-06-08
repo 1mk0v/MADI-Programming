@@ -16,7 +16,16 @@ function getData() {
     return mySelected
 }
 
+function getArrayOfID() {
+    let array = []
+    for (let object of data) {
+        array.push(object['id'])
+    }
+    return array
+} 
+
 let boolData = getData()
+let arrayID = getArrayOfID()
+console.log(arrayID)
 
-
-export {data, boolData}
+export {data, boolData, arrayID}

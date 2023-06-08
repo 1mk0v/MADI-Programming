@@ -1,19 +1,21 @@
 import { CheckboxComponent } from "./components/checkbox.js";
 import { InputComponent } from "./components/input.js";
-import { data, boolData } from "./data.js";
+import { data, boolData, arrayID } from "./data.js";
 
 const App = {
     data() {
         return {
             objectKeys: data,
             textareaData: '',
-            selected: boolData
+            selected: boolData,
+            symbols: arrayID
         }
     },
     template: `
     <form>
         <input-component
             :selected='selected'
+            :symbols='symbols'
             @changeInputEvent='getNewSelected'>
         </input-component>
         <checkbox-component
