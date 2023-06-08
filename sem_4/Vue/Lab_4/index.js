@@ -28,7 +28,7 @@ const App = {
     </textarea>`,
     methods: {
         getNewSelected(data) {
-            console.log(data)
+            // console.log(data)
             Object.assign(this.selected,data);
             let text = '';
             for (let key in data) {
@@ -38,14 +38,6 @@ const App = {
                 }
             }
             this.textareaData = text
-        },
-        setData: function () {
-            for (let key of data) {
-                if (this.selected[key] == true) {
-                    console.log(key)
-                }
-            }
-            return data
         },
     },
     components: {

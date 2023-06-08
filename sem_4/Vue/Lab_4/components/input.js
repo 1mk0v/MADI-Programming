@@ -5,8 +5,7 @@ const InputComponent = {
     data() {
         return {
             inputSelected: Object.assign({},this.selected),
-            newData: '',
-            symbols: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+            newData: ''
         }
     },
     template: `
@@ -14,11 +13,11 @@ const InputComponent = {
             class="uk-input"
             type='text'
             v-model='newData'
-            @keyup='updateVaribles'>`,
+            @keyup='updateVaribles'
+            @keydown='blockVaribles'>`,
     watch: {
         selected: {
             handler() {
-                console.log(this.selected)
                 let string = ''
                 for (let key in this.selected) {
                     if (this.selected[key] == true) {
@@ -28,11 +27,12 @@ const InputComponent = {
                 this.newData = string
             },
             deep: true
-        }
+        },
     },
 
     methods: {
-        updateVaribles: function(event) {
+        updateVaribles: function() {
+            console.log('update')
             for (let key in this.inputSelected) {
                 if (this.newData.indexOf(key) > -1) {
                     this.inputSelected[key] = true;
@@ -40,16 +40,13 @@ const InputComponent = {
                     this.inputSelected[key] = false;
                 }
             }
-            this.$emit('changeInputEvent', this.inputSelected);
+            this.$emit('changeInputEvent', this.inputSelected);            
         },
-        getValue: function() {
-            let string = ''
-            for (let key of this.inputSelected) {
-                if (this.selected[key] == true) {
-                    string += key
-                }
+        blockVaribles: function(event) {
+            let index_key = this.newData.indexOf(event.key)
+            if (index_key > -1) {
+                event.preventDefault();
             }
-            return string
         }
     },
 }

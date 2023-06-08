@@ -17,6 +17,6 @@ function getData() {
 }
 
 let boolData = getData()
-console.log(boolData)
+
 
 export {data, boolData}
