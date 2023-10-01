@@ -1,0 +1,66 @@
+body {
+    color: white;
+    background-color: black;
+    size: 100%;
+    font-family: 'Pixel';
+    /* cursor: none; */
+}
+
+#logo {
+    margin-top: 2%;
+    margin-bottom: 5%;
+    text-align: center;
+    justify-content: center;
+    font-size: 26px;
+    font-family: 'Pixel';
+}
+
+#maze {
+    pointer-events: none;
+    margin: 0 auto;
+    display: grid;
+    height: 70vh;
+    width: 70vw;
+}
+
+#life {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    margin-bottom:2vh ;
+}
+
+#hero {
+    position: absolute;
+    background-color: #49c5b6;
+    z-index: 2;
+    border-radius: 50%;
+}
+
+.food {
+    position: relative;
+    pointer-events: none;
+    background-color: #f6ff00;
+}
+
+.donePath {
+    position: relative;
+    pointer-events: none;
+    background-color: #00fff78e;
+}
+
+.path {
+    position: relative;
+    pointer-events: none;
+    background-color: #FFF00000;
+}
+
+.wall {
+    position: relative;
+    background-color: #FFFFFF;
+}
+
+@font-face {
+    font-family: 'Pixel';
+    src: url('PressStart2P-Regular.ttf');
+}
