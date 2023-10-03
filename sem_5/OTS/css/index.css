@@ -37,6 +37,12 @@ body {
     border-radius: 50%;
 }
 
+.pathToHome {
+    position: relative;
+    pointer-events: none;
+    background-color: #33FF33;
+}
+
 .food {
     position: relative;
     pointer-events: none;

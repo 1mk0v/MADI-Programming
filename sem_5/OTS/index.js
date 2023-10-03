@@ -1,14 +1,12 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //КОНСТАНТЫ
 const BLOCK_SIZE = 50;
-const STARTING_POSITION = '1 1';
-const LIFES = 5;
-const STEP = BLOCK_SIZE/10;
 const MIN_BLOCKS_COUNT = 5;
 const HERO_SIZE = BLOCK_SIZE/2;
 const WALL_CLASS = 'wall';
 const PATH_CLASS = 'path';
 const HOUSE_NUM = 4
+const INTERVAl_TIME = 100
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ
@@ -16,6 +14,7 @@ let mazeOpt;
 let matrix;
 let winBlock;
 let run;
+let babyAnt
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //ПЕРСОНАЖИ
 
@@ -161,8 +160,10 @@ function update() {
         for (let x=0; x<mazeOpt[0];x++) {
             if (matrix[y][x] == 1) {
                 document.getElementById(`${y} ${x}`).className = WALL_CLASS;
-            } else {
+            } else if (matrix[y][x] == 0){
                 document.getElementById(`${y} ${x}`).className = PATH_CLASS;
+            } else {
+                // document.getElementById(`${y} ${x}`).className = 'food';
             }
         }
     }
@@ -199,16 +200,6 @@ function createMAZE() {
 
 ///////////////////////////////////////////////////////
 //Раскидываем еду по всему лабиринту
-function throwingFood() {
-    for (let y=0; y < matrix.length; y++) {
-        for (let x=0; x < matrix[y].length;x++) {
-            if (matrix[y][x] == 0 && Math.floor(Math.random() * 50) == 1) {
-                matrix[y][x] = 3;
-                document.getElementById(`${y} ${x}`).className = 'food';
-            }
-        }
-    }
-}
 
 
 ///////////////////////////////////////////////////////
@@ -227,9 +218,16 @@ function endBlock() {
     return {y: randomEndY, x: randomEndX};
 }
 
+
 class Stack {
     constructor(startPos) {
         this.array = Array(startPos)
+    }
+
+    removeFirst() {
+        let first = this.array[0]
+        this.array.splice(0,1)
+        return first
     }
 
     getLast() {
@@ -237,10 +235,7 @@ class Stack {
     }
     
     pop() {
-        if (this.length > 0) {
-            this.length--
-            return this.array.pop()
-        } 
+        return this.array.pop()
     }
 
     push(value) {
@@ -254,14 +249,6 @@ class Stack {
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//ПОИСК
-class Bot {
-    constructor(map, pos) {
-        this.map = map
-        this.pos = pos
-    }
-}
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //Муравейчик)
@@ -275,8 +262,17 @@ class Ant {
             x: x,
             y: y
         },
-        this.myMap = createMatrixOfMaze()
+        this.myMap = copyMatrix()
         this.storage = new Stack(this.meInBlock)
+        this.wayToHome = new Stack(null)
+        this.homeStore = new Stack()
+        this.interval = null
+    }
+
+    throwingFood() {
+        let pos = endBlock()
+        this.myMap[pos.y][pos.x] = 3
+        document.getElementById(`${pos.y} ${pos.x}`).className = 'food';
     }
 
     updatePathesColor() {
@@ -289,68 +285,67 @@ class Ant {
         }
     }
 
-    getBlockMeIn() {
-        return document.getElementById(`${this.meInBlock.y} ${this.meInBlock.x}`)
+    getBlockMeIn(pos) {
+        return document.getElementById(`${pos.y} ${pos.x}`)
     }
 
-    aroundMe() {
+    aroundMe(pos) {
         return {
-            top: matrix[this.meInBlock.y-1][this.meInBlock.x],
-            right: matrix[this.meInBlock.y][this.meInBlock.x+1],
-            bottom: matrix[this.meInBlock.y+1][this.meInBlock.x],
-            left: matrix[this.meInBlock.y][this.meInBlock.x-1]
+            top: matrix[pos.y-1][pos.x],
+            right: matrix[pos.y][pos.x+1],
+            bottom: matrix[pos.y+1][pos.x],
+            left: matrix[pos.y][pos.x-1]
         };
     }
 
-    whatISee() {
+    whatISee(position, map) {
         return {
-            top: this.myMap[this.meInBlock.y-1][this.meInBlock.x],
-            right: this.myMap[this.meInBlock.y][this.meInBlock.x+1],
-            bottom: this.myMap[this.meInBlock.y+1][this.meInBlock.x],
-            left: this.myMap[this.meInBlock.y][this.meInBlock.x-1]
+            top: map[position.y-1][position.x],
+            right: map[position.y][position.x+1],
+            bottom: map[position.y+1][position.x],
+            left: map[position.y][position.x-1]
         };
     }
 
-    newPathes() {
-        let around = this.aroundMe()
-        let top = this.myMap[this.meInBlock.y-1][this.meInBlock.x]
-        if (top != 2) {
-            this.myMap[this.meInBlock.y-1][this.meInBlock.x] = around.top
+    newPathes(pos, map) {
+        let around = this.whatISee(pos, map)
+        if (map[pos.y-1][pos.x] != 2) {
+            map[pos.y-1][pos.x] = around.top
         }
-        let right = this.myMap[this.meInBlock.y][this.meInBlock.x+1]
-        if (right != 2) {
-            this.myMap[this.meInBlock.y][this.meInBlock.x+1] = around.right
+        if (map[pos.y][pos.x+1] != 2) {
+            map[pos.y][pos.x+1] = around.right
         }
-        let bottom = this.myMap[this.meInBlock.y+1][this.meInBlock.x]
-        if (bottom != 2) {
-            this.myMap[this.meInBlock.y+1][this.meInBlock.x] = around.bottom
+        if (map[pos.y+1][pos.x] != 2) {
+            map[pos.y+1][pos.x] = around.bottom
         }
-        let left = this.myMap[this.meInBlock.y][this.meInBlock.x-1]
-        if (left != 2) {
-            this.myMap[this.meInBlock.y][this.meInBlock.x-1] = around.left
+        if (map[pos.y][pos.x-1] != 2) {
+            map[pos.y][pos.x-1] = around.left
         }
-        return this.whatISee()
+        return around
     }
 
-    whereToGo() {
-        let around = this.newPathes()
+    whereToGo(position, map) {
+        let around = this.newPathes(position, map)
         let pathes = Array()
         if (!around.top || around.top == 3 || around.top == HOUSE_NUM) {
-            pathes.push({x:this.meInBlock.x, y:this.meInBlock.y-1})
+            pathes.push({x:position.x, y:position.y-1})
         }
         if (!around.right || around.right == 3 || around.right == HOUSE_NUM) {
-            pathes.push({x:this.meInBlock.x+1, y:this.meInBlock.y}) 
+            pathes.push({x:position.x+1, y:position.y}) 
         }
         if (!around.bottom || around.bottom == 3 || around.bottom == HOUSE_NUM) {
-            pathes.push({x:this.meInBlock.x, y:this.meInBlock.y+1})
+            pathes.push({x:position.x, y:position.y+1})
         }
         if (!around.left || around.left == 3 || around.left == HOUSE_NUM) {
-            pathes.push({x:this.meInBlock.x-1, y:this.meInBlock.y})
+            pathes.push({x:position.x-1, y:position.y})
         }
         return pathes
     }
 
     findIndex(objects, value) {
+        if (value == null) {
+            return -1
+        } 
         for (let index in objects) {
             if (JSON.stringify(objects[index]) == JSON.stringify(value)) {
                 return index
@@ -359,11 +354,13 @@ class Ant {
         return -1
     }
 
-    takePath() {
-        let lastStep = this.storage.getLast()
-        let pathes = this.whereToGo()
-        if (pathes.length == 1) {
-            this.myMap[this.meInBlock.y][this.meInBlock.x] = 2
+    takePath(lastStep, position) {
+        let pathes = this.whereToGo(position, this.myMap)
+        if (pathes.length == 0) {
+            alert('МУРАВЕЙ ОБОШЕЛ ВСЮ КАРТУ')
+
+        } else if (pathes.length == 1) {
+            this.myMap[position.y][position.x] = 2
         } else {
             let index = this.findIndex(pathes, lastStep)
             pathes.splice(index, 1)
@@ -373,64 +370,117 @@ class Ant {
     }
 
     doStep() {
-        let newPath = this.takePath()
-        this.storage.push(this.meInBlock) 
+        let newPath = this.takePath(this.storage.getLast(), this.meInBlock)
+        this.storage.push(this.meInBlock)
         this.meInBlock = newPath
-        let meInBlock = this.getBlockMeIn()
-        hero.style.left = `${meInBlock.getBoundingClientRect().left + BLOCK_SIZE/5}px`;
-        hero.style.top = `${meInBlock.getBoundingClientRect().top + BLOCK_SIZE/5}px`;
+        let block = this.getBlockMeIn(this.meInBlock)
+        hero.style.left = `${block.getBoundingClientRect().left + BLOCK_SIZE/5}px`;
+        hero.style.top = `${block.getBoundingClientRect().top + BLOCK_SIZE/5}px`;
         this.updatePathesColor()
         return this.meInBlock
     }
 
     findFood() {
-        if (matrix[this.meInBlock.y][this.meInBlock.x] == 3) {
+        if (this.myMap[this.meInBlock.y][this.meInBlock.x] == 3) {
             return true
         }
         return false
     }
 
     takeFood() {
-        matrix[this.meInBlock.y][this.meInBlock.x] = 0
+        this.myMap[this.meInBlock.y][this.meInBlock.x] = 0
         let food = document.getElementById(`${this.meInBlock.y} ${this.meInBlock.x}`)
         food.className = PATH_CLASS
         this.bag.push(this.meInBlock)
     }
 
-    findQween() {
-        let searchBot = new Bot(matrix, this.meInBlock)
-        searchBot.findHouse()
+    findHome(lastPos, position, map) {
+        this.wayToHome.push(position)
+        if (map[position.y][position.x] == 4) {
+            return true
+        }
+        let pathes = this.whereToGo(position, map)
+        let index = this.findIndex(pathes, lastPos)
+        if (index > -1) pathes.splice(index, 1)
+
+        for (let path of pathes) {
+            if (this.findHome(position, path, map)) {
+                return true
+            }
+            this.wayToHome.pop()
+        }
+        return false
+    }
+
+
+    waitFor(msec) {
+      return new Promise(resolve => setTimeout(resolve, msec))
+    }
+    
+    async goHome() {
+        clearInterval(this.interval)
+        console.log(this.wayToHome.array)
+        for (let path of this.wayToHome.array) {
+            if (path != null) {
+                await this.waitFor(INTERVAl_TIME/2)
+                let block = this.getBlockMeIn(path)
+                block.className = 'pathToHome'
+            }
+        }
+        for (let path of this.wayToHome.array) {
+            if (path != null) {
+                await this.waitFor(INTERVAl_TIME)
+                this.meInBlock = path
+                let block = this.getBlockMeIn(this.meInBlock)
+                block.className = PATH_CLASS
+                hero.style.left = `${block.getBoundingClientRect().left + BLOCK_SIZE/5}px`;
+                hero.style.top = `${block.getBoundingClientRect().top + BLOCK_SIZE/5}px`;
+            }
+        }
+        this.wayToHome.delete()
+        this.homeStore.push(this.bag.pop())
+        this.myMap = copyMatrix()
+        update()
+        this.AI()
     }
 
     AI() {
-        setInterval(() => {
+        this.throwingFood()
+        this.interval = setInterval(() => {
             if (this.findFood()) {
                 this.takeFood()
-                this.findQween()
+                this.findHome(null, this.meInBlock, copyMatrix())
+                this.goHome()
             }
             this.doStep()
-        },
-          50
-        )
+        }, INTERVAl_TIME)
     }
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //ИГРА
+function copyMatrix() {
+    let copy = Array()
+    for (let i = 0; i<mazeOpt[1]; i++) {
+        copy.push(Array())
+        for (let j = 0; j<mazeOpt[0]; j++) {
+            copy[i].push(matrix[i][j])
+        }
+    }
+    return copy
+}
 
 function GameStart() {
     createMAZE();
-    throwingFood()
     let hero = document.getElementById('hero');
     winBlock = endBlock();
-    let lastBlock = document.getElementById(`${winBlock.y} ${winBlock.x}`);
     let startBlock = document.getElementById(`${winBlock.y} ${winBlock.x}`);
-    lastBlock.style.background = 'red';
+    startBlock.style.background = 'red';
     matrix[winBlock.y][winBlock.x] = HOUSE_NUM
     hero.style.left = `${startBlock.getBoundingClientRect().left + BLOCK_SIZE/5}px`;
     hero.style.top = `${startBlock.getBoundingClientRect().top + BLOCK_SIZE/5}px`;
     babyAnt = new Ant(hero, x = winBlock.x, y = winBlock.y);
-    // babyAnt.AI()
+    babyAnt.AI()
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
