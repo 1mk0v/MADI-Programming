@@ -6,8 +6,7 @@ const HERO_SIZE = BLOCK_SIZE/2;
 const WALL_CLASS = 'wall';
 const PATH_CLASS = 'path';
 const HOUSE_NUM = 4
-const INTERVAl_TIME = 100
-
+let INTERVAL_TIME = 100
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ
 let mazeOpt;
@@ -198,9 +197,6 @@ function createMAZE() {
     }
 } 
 
-///////////////////////////////////////////////////////
-//Раскидываем еду по всему лабиринту
-
 
 ///////////////////////////////////////////////////////
 //Выбираем блок выхода из лабиринта
@@ -369,13 +365,22 @@ class Ant {
         return path
     }
 
-    doStep() {
+    animate(pos) {
+        let oldBlock = this.getBlockMeIn(pos)
+        console.log(oldBlock.getBoundingClientRect().left - BLOCK_SIZE/5)
+        this.hero.animate([
+            {transform: `translate(${oldBlock.getBoundingClientRect().top -BLOCK_SIZE/5}px, ${oldBlock.getBoundingClientRect().left - BLOCK_SIZE/5}px)`},
+          ], 300);
+        this.waitFor(300)
+    }
+
+    async doStep() {
         let newPath = this.takePath(this.storage.getLast(), this.meInBlock)
         this.storage.push(this.meInBlock)
         this.meInBlock = newPath
         let block = this.getBlockMeIn(this.meInBlock)
-        hero.style.left = `${block.getBoundingClientRect().left + BLOCK_SIZE/5}px`;
-        hero.style.top = `${block.getBoundingClientRect().top + BLOCK_SIZE/5}px`;
+        this.hero.style.left = `${block.getBoundingClientRect().left + BLOCK_SIZE/5}px`;
+        this.hero.style.top = `${block.getBoundingClientRect().top + BLOCK_SIZE/5}px`;
         this.updatePathesColor()
         return this.meInBlock
     }
@@ -402,7 +407,6 @@ class Ant {
         let pathes = this.whereToGo(position, map)
         let index = this.findIndex(pathes, lastPos)
         if (index > -1) pathes.splice(index, 1)
-
         for (let path of pathes) {
             if (this.findHome(position, path, map)) {
                 return true
@@ -422,14 +426,14 @@ class Ant {
         console.log(this.wayToHome.array)
         for (let path of this.wayToHome.array) {
             if (path != null) {
-                await this.waitFor(INTERVAl_TIME/2)
+                await this.waitFor(INTERVAL_TIME/2)
                 let block = this.getBlockMeIn(path)
                 block.className = 'pathToHome'
             }
         }
         for (let path of this.wayToHome.array) {
             if (path != null) {
-                await this.waitFor(INTERVAl_TIME)
+                await this.waitFor(INTERVAL_TIME)
                 this.meInBlock = path
                 let block = this.getBlockMeIn(this.meInBlock)
                 block.className = PATH_CLASS
@@ -439,11 +443,18 @@ class Ant {
         }
         this.wayToHome.delete()
         this.homeStore.push(this.bag.pop())
+        this.updateHomeStore()
         this.myMap = copyMatrix()
         update()
         this.AI()
     }
 
+    updateHomeStore() {
+        let homeDiv = document.getElementById("home_store")
+        let p = document.createElement('p')
+        p.innerText = JSON.stringify(this.homeStore.getLast())
+        homeDiv.appendChild(p)
+    }
     AI() {
         this.throwingFood()
         this.interval = setInterval(() => {
@@ -453,7 +464,7 @@ class Ant {
                 this.goHome()
             }
             this.doStep()
-        }, INTERVAl_TIME)
+        }, INTERVAL_TIME)
     }
 }
 

@@ -5,6 +5,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="css/index.css">
+    <link rel="stylesheet" type="text/css" href="css/css/uikit.css">
+    <script src="css/js/uikit.js"></script>
     <script src="index.js"></script>
     <title>TERRARIUM</title>
 </head>
@@ -14,7 +16,22 @@
     <div id="maze">
         <div id="hero"></div>
     </div>
-    <div id="life">
+    <div id="bag">
+        <a class="uk-button uk-button-default" href="#modal-overflow" uk-toggle>HOME STORE</a>
+        <div id="modal-overflow" uk-modal>
+            <div class="uk-modal-dialog">
+                <button class="uk-modal-close-default" type="button" uk-close></button>
+                <div class="uk-modal-header">
+                    <h2 class="uk-modal-title">HOME STORE</h2>
+                </div>
+                <div class="uk-modal-body" uk-overflow-auto id="home_store" style="color: black;">
+                </div>
+                <div class="uk-modal-footer uk-text-right">
+                    <button class="uk-button uk-button-default uk-modal-close" type="button">Cancel</button>
+                </div>
+            
+            </div>
+        </div>
     </div>
 </body>
 </html>

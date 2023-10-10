@@ -1,7 +1,14 @@
+html {
+    height: 100%;
+    background-color: black;
+    margin: 0%;
+    color: white;
+}
+
 body {
     color: white;
     background-color: black;
-    size: 100%;
+    margin: 0;
     font-family: 'Pixel';
     /* cursor: none; */
 }
@@ -23,11 +30,12 @@ body {
     width: 70vw;
 }
 
-#life {
+#bag {
     display: flex;
     justify-content: center;
     text-align: center;
     margin-bottom:2vh ;
+    color: black;
 }
 
 #hero {
