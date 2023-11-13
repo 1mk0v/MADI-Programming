@@ -1,3 +1,5 @@
+from socket import socket
+from functools import partial
 import logging
 import aiohttp
 import datetime
@@ -9,34 +11,35 @@ class Source(BaseElement):
     
     def __init__(
             self,
-            name: str = 'SourceName',
+            name: str = 'Base Element Name',
             host: str = '127.0.0.1',
+            type: str = 'client',
             port: int = 8000,
-            sentHost: str = '127.0.0.1',
-            sentPort: int = 8001,
+            connectHost: str = '127.0.0.1',
+            connectPort: int = 8000,
             intensity: float | int = 0.67) -> None:
-        super().__init__(name,host,port,sentHost,sentPort)
-        self.intensity = intensity
-        self.sendedDataCount = 0
+         super().__init__( name, host, type, port, connectHost, connectPort)
+         self.intensity = intensity
+         self.sendedDataCount = 0
+         self.datetime = datetime.datetime.utcnow()
 
     def getGeneratedData(self):
         self.sendedDataCount+=1
         return json.dumps({
             "id": self.sendedDataCount,
-            "datetime": self.datetime.__str__(),
+
+            "datetime": self.datetime.isoformat(),
+
             "data": f"Data of {self.sendedDataCount} ID"
         })
+
+    def activateFunction(self, socket:socket):
+        data = self.getGeneratedData()
+        socket.sendall(data)
+        print(f'Data sending to {socket.__dict__}')
     
-    async def start(self):
-        async with aiohttp.ClientSession() as session:
-            while 1:
-                # response = await session.post(
-                #     url=self.urlToSent,
+    def _runClient(self):
+        return super()._runClient()
 
-                #     data=self.getGeneratedData(),
-
-                #     headers={"Content-Type": "application/json"}
-                # )
-                # logging.info(await response.json())
-                logging.info(msg=self.getLogging(self.getGeneratedData()))
-                # time.sleep(1)
+    # def _runClient(self,):
+    #     return super()._runClient(self.activateFunction)
