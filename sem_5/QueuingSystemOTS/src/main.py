@@ -1,20 +1,26 @@
 import asyncio
 import datetime
-from Tools import source
-from Tools import BaseElement
+import threading
+from Tools.source import Source
+from Tools.delay import Delay
+from Tools.queue import Queue
 from System import QueuningSystem
 
 async def main():
-    # date = datetime.datetime.utcnow().isoformat()
-    # print(date)
+
     queuningSystem = QueuningSystem(
-        BaseElement(
-            name='Test element 2',
-            port = 8000,
+        Delay(
+            name="Admin",
+            connectPort=8002,
+            delay=0.5
         ),
-        BaseElement(
-            type='client',
-            connectPort=8000
+        Queue(
+            name="Queue",
+            port=8002
+        ),
+        Source(
+            name = "Source",
+            connectPort=8002
         )
     )
     queuningSystem.run()

@@ -13,7 +13,8 @@ class BaseElement:
             type:str = 'server',
             port:int = 8000,
             connectHost:str = '127.0.0.1',
-            connectPort:int = 8001) -> None:
+            connectPort:int = 8001,
+            daemon:bool = False) -> None:
         self.name = name
         self.type = type
         self.host = host
@@ -25,6 +26,7 @@ class BaseElement:
             'client': self._runClient
         }
         self.run = options[self.type]
+        
 
     def _runClient(self):
         elementSocket = socket.socket()
@@ -33,11 +35,11 @@ class BaseElement:
         data = elementSocket.recv(1024)
 
     def _runServer(self):
-        elementSocket = socket.socket()
+        elementSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         elementSocket.bind((self.host , self.port))
         print(f'Server [{self.name}] start on {self.host, self.port}')
+        elementSocket.listen(2)
         while True:
-            elementSocket.listen(1)
             conn, addr = elementSocket.accept()
             while True:
                 data = conn.recv(1024)
@@ -45,4 +47,3 @@ class BaseElement:
                     break
                 print(f"[{self.name}] Connection from {addr}")
                 conn.send(data.upper())
-        

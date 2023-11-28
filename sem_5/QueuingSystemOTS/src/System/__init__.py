@@ -1,3 +1,4 @@
+
 import threading
 
 class QueuningSystem:
@@ -14,6 +15,10 @@ class QueuningSystem:
                 thread.start()
             else:
                 clients.append(element)
+            
         for client in clients:
             thread = threading.Thread(target=client.run)
             thread.start()
+    
+    def start(element):
+        pass
